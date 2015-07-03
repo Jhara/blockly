@@ -277,7 +277,9 @@ Blockly.Drools['logical_compare_att'] = function(block) {
 Blockly.Blocks['logical_operation_att'] = {
   category: 'logical_operation_att',
   init: function() {
-    var OPERATORS = [["and", "and"], ["or", "or"] ];
+    var OPERATORS =
+        [[Blockly.Msg.LOGIC_OPERATION_AND, 'AND'],
+         [Blockly.Msg.LOGIC_OPERATION_OR, 'OR']];
     this.setColour(Blockly.Blocks.logic.HUE);
     this.setOutput(true);
     this.appendValueInput('A');
@@ -288,38 +290,35 @@ Blockly.Blocks['logical_operation_att'] = {
 };
 
 Blockly.Drools['logical_operation_att'] = function(block) {
+  /*var value_A = Blockly.Drools.valueToCode(block, 'A', Blockly.Drools.ORDER_ATOMIC);
   var dropdown_op = block.getFieldValue('OP');
-  var value_A = Blockly.Drools.valueToCode(block, 'A', Blockly.Drools.ORDER_ATOMIC);
   var value_B = Blockly.Drools.valueToCode(block, 'B', Blockly.Drools.ORDER_ATOMIC);
-  var block_A = block.childBlocks_[0];
-  var block_B = block.childBlocks_[1];
-  var code = '';
-  //console.log('block ',block.childBlocks_);
-  //console.log('dropdown_op '+dropdown_op);
+  var code = value_A+' '+dropdown_op+' '+value_B;
 
+  return [code, Blockly.Drools.ORDER_ATOMIC];*/
 
-
-  /*if(block_A.category === 'att' && block_B.category === 'logical_operation_att'){
-    if(dropdown_op === 'and'){
-      code += value_A+' && ('+value_B+')';
-    }else{
-      code += value_A+' || '+value_B;
+  // Operations 'and', 'or'.
+  var operator = (block.getFieldValue('OP') == 'AND') ? '&&' : '||';
+  var order = (operator == '&&') ? Blockly.Drools.ORDER_LOGICAL_AND :
+      Blockly.Drools.ORDER_LOGICAL_OR;
+  var argument0 = Blockly.Drools.valueToCode(block, 'A', order);
+  var argument1 = Blockly.Drools.valueToCode(block, 'B', order);
+  if (!argument0 && !argument1) {
+    // If there are no arguments, then the return value is false.
+    argument0 = 'false';
+    argument1 = 'false';
+  } else {
+    // Single missing arguments have no effect on the return value.
+    var defaultArgument = (operator == '&&') ? 'true' : 'false';
+    if (!argument0) {
+      argument0 = defaultArgument;
     }
-  }else if(block_A.category === 'logical_operation_att' && block_B.category === 'logical_operation_att'){
-    if(dropdown_op === 'and'){
-      code += value_A+' , '+value_B+'';
-    }else{
-      code += value_A+' || '+value_B;
+    if (!argument1) {
+      argument1 = defaultArgument;
     }
-  }else{
-    if(dropdown_op === 'and'){
-      code += value_A+' , '+value_B;
-    }else{
-      code += value_A+' || '+value_B;
-    }
-  }*/
-
-  return [code, Blockly.Drools.ORDER_ATOMIC];
+  }
+  var code = argument0 + ' ' + operator + ' ' + argument1;
+  return [code, order];
 
 };
 
