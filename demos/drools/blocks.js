@@ -192,27 +192,27 @@ Blockly.Blocks['fact'] = {
     this.appendValueInput("FACT_NAME")
         .appendField(new Blockly.FieldTextInput(""), "FACT_VAR")
         .appendField("Persona");
-    this.setInputsInline(true);
-    this.setPreviousStatement(true, "fact");
-    this.setNextStatement(true, "fact");
-    this.setColour(230);
+    this.setPreviousStatement(true);
+    this.setNextStatement(true);
+    this.setColour(240);
+    this.setTooltip('');
+    this.setHelpUrl('http://www.example.com/');
   }
 };
 
 Blockly.Drools['fact'] = function(block) {
   var text_fact_var = block.getFieldValue('FACT_VAR');
-  var value_fact_name = Blockly.Drools.valueToCode(block, 'FACT_NAME', Blockly.Drools.ORDER_ATOMIC);
-  var code = (text_fact_var != ''?text_fact_var+': ':'')+block.name+' ('+value_fact_name+') \n';
-  return code;
+  var value_fact_name = Blockly.Drools.valueToCode(block, 'FACT_NAME', Blockly.Drools.ORDER_NONE)||'';
+  var code = (text_fact_var != ''?text_fact_var+': ':'')+block.name+' ('+value_fact_name+')';
+  return code + '\n';
 };
 
 Blockly.Blocks['fact_att_edad'] = {
-  category: 'att',
   name: 'edad',
   init: function() {
     this.appendDummyInput()
         .setAlign(Blockly.ALIGN_CENTRE)
-        .appendField(new Blockly.FieldTextInput(""), "FACT_ATT_VAR")
+        .appendField(new Blockly.FieldTextInput(""), "FIELD_VAR")
         .appendField("edad");
     this.setInputsInline(true);
     this.setOutput(true);
@@ -222,18 +222,17 @@ Blockly.Blocks['fact_att_edad'] = {
 
 
 Blockly.Drools['fact_att_edad'] = function(block) {
-  var att_var = block.getFieldValue('FACT_ATT_VAR');
-  var code = (att_var !== ''?att_var+': ':'')+block.name;
+  var text_field_var = block.getFieldValue('FIELD_VAR') || '';
+  var code = (text_field_var !== ''?text_field_var+': ':'')+block.name;
   return [code, Blockly.Drools.ORDER_ATOMIC];
 };
 
 Blockly.Blocks['fact_att_sexo'] = {
-  category: 'att',
   name: 'sexo',
   init: function() {
     this.appendDummyInput()
         .setAlign(Blockly.ALIGN_CENTRE)
-        .appendField(new Blockly.FieldTextInput(""), "FACT_ATT_VAR")
+        .appendField(new Blockly.FieldTextInput(""), "FIELD_VAR")
         .appendField("sexo");
     this.setInputsInline(true);
     this.setOutput(true);
@@ -243,8 +242,8 @@ Blockly.Blocks['fact_att_sexo'] = {
 
 
 Blockly.Drools['fact_att_sexo'] = function(block) {
-  var att_var = block.getFieldValue('FACT_ATT_VAR');
-  var code = (att_var !== ''?att_var+': ':'')+block.name;
+  var text_field_var = block.getFieldValue('FIELD_VAR') || '';
+  var code = (text_field_var !== ''?text_field_var+': ':'')+block.name;
   return [code, Blockly.Drools.ORDER_ATOMIC];
 };
 
@@ -252,77 +251,44 @@ Blockly.Drools['fact_att_sexo'] = function(block) {
 
 
 ////////////////////LOGICAL ////////////
+/*function logicalOperationDrools(block){
+  var code = '';
 
-Blockly.Blocks['logical_compare_att'] = {
-  init: function() {
-    var OPERATORS = [["==", "=="], ["!=", "!="], [">", ">"], [">=", ">="], ["<", "<"], ["<=", "<="] ];
-    this.setColour(Blockly.Blocks.logic.HUE);
-    this.setOutput(true);
-    this.appendValueInput('A');
-    this.appendValueInput('B')
-        .appendField(new Blockly.FieldDropdown(OPERATORS), 'OP');
-    this.setInputsInline(true);
-  }
-};
-
-Blockly.Drools['logical_compare_att'] = function(block) {
-  var value_A = Blockly.Drools.valueToCode(block, 'A', Blockly.Drools.ORDER_ATOMIC);
-  var dropdown_op = block.getFieldValue('OP');
-  var value_B = Blockly.Drools.valueToCode(block, 'B', Blockly.Drools.ORDER_ATOMIC);
-  var code = value_A+' '+dropdown_op+' '+value_B;
-  return [code, Blockly.Drools.ORDER_ATOMIC];
-};
-
-
-Blockly.Blocks['logical_operation_att'] = {
-  category: 'logical_operation_att',
-  init: function() {
-    var OPERATORS =
-        [[Blockly.Msg.LOGIC_OPERATION_AND, 'AND'],
-         [Blockly.Msg.LOGIC_OPERATION_OR, 'OR']];
-    this.setColour(Blockly.Blocks.logic.HUE);
-    this.setOutput(true);
-    this.appendValueInput('A');
-    this.appendValueInput('B')
-        .appendField(new Blockly.FieldDropdown(OPERATORS), 'OP');
-    this.setInputsInline(true);
-  }
-};
-
-Blockly.Drools['logical_operation_att'] = function(block) {
-  /*var value_A = Blockly.Drools.valueToCode(block, 'A', Blockly.Drools.ORDER_ATOMIC);
-  var dropdown_op = block.getFieldValue('OP');
-  var value_B = Blockly.Drools.valueToCode(block, 'B', Blockly.Drools.ORDER_ATOMIC);
-  var code = value_A+' '+dropdown_op+' '+value_B;
-
-  return [code, Blockly.Drools.ORDER_ATOMIC];*/
-
-  // Operations 'and', 'or'.
   var operator = (block.getFieldValue('OP') == 'AND') ? '&&' : '||';
-  var order = (operator == '&&') ? Blockly.Drools.ORDER_LOGICAL_AND :
-      Blockly.Drools.ORDER_LOGICAL_OR;
-  var argument0 = Blockly.Drools.valueToCode(block, 'A', order);
-  var argument1 = Blockly.Drools.valueToCode(block, 'B', order);
-  if (!argument0 && !argument1) {
-    // If there are no arguments, then the return value is false.
-    argument0 = 'false';
-    argument1 = 'false';
-  } else {
-    // Single missing arguments have no effect on the return value.
-    var defaultArgument = (operator == '&&') ? 'true' : 'false';
-    if (!argument0) {
-      argument0 = defaultArgument;
-    }
-    if (!argument1) {
-      argument1 = defaultArgument;
-    }
+  var order = (operator == '&&') ? Blockly.Drools.ORDER_LOGICAL_AND : Blockly.Drools.ORDER_LOGICAL_OR;
+
+  var tupleA = Blockly.Drools.blockToCode(block.getInputTargetBlock('A'));
+  var tupleB = Blockly.Drools.blockToCode(block.getInputTargetBlock('B'));
+
+  var codeA = tupleA[0];
+  var innerOrderA = tupleA[1];
+  var codeB = tupleB[0];
+  var innerOrderB = tupleB[1];
+  console.log('innerOrderA '+innerOrderA);
+  console.log('innerOrderB '+innerOrderB);
+  console.log('order '+order);
+
+  if(innerOrderA == 13 && innerOrderB == 13 && order == 13){
+    code = codeA+','+codeB;
+  }else if(innerOrderA == 0 && innerOrderB == 0 && order == 13){
+    code = codeA+','+codeB;
+  }else if(innerOrderA == 0 && innerOrderB == 13 && order == 13){
+    code = codeA+','+codeB;
+  }else if(innerOrderA == 0 && innerOrderB == 14 && order == 13){
+    code = codeA+' '+operator+' ('+codeB+')';
+  }else if(innerOrderA == 13 && innerOrderB == 14 && order == 13){
+    code = codeA+' '+operator+' ('+codeB+')';
+  }else if(innerOrderA == 14 && innerOrderB == 14 && order == 13){
+    code = '('+codeA+') '+operator+' ('+codeB+')';
+  }else{
+    code = codeA+' '+operator+' '+codeB;
   }
-  var code = argument0 + ' ' + operator + ' ' + argument1;
-  return [code, order];
 
-};
+  console.log('code final '+code);
 
+  return code;
 
+}*/
 
 
 ////////////////////// COMPARE ////////////////////////////////////

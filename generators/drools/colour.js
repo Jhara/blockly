@@ -19,45 +19,45 @@
  */
 
 /**
- * @fileoverview Generating JavaScript for colour blocks.
+ * @fileoverview Generating Drools for colour blocks.
  * @author fraser@google.com (Neil Fraser)
  */
 'use strict';
 
-goog.provide('Blockly.JavaScript.colour');
+goog.provide('Blockly.Drools.colour');
 
-goog.require('Blockly.JavaScript');
+goog.require('Blockly.Drools');
 
 
-Blockly.JavaScript['colour_picker'] = function(block) {
+Blockly.Drools['colour_picker'] = function(block) {
   // Colour picker.
   var code = '\'' + block.getFieldValue('COLOUR') + '\'';
-  return [code, Blockly.JavaScript.ORDER_ATOMIC];
+  return [code, Blockly.Drools.ORDER_ATOMIC];
 };
 
-Blockly.JavaScript['colour_random'] = function(block) {
+Blockly.Drools['colour_random'] = function(block) {
   // Generate a random colour.
-  var functionName = Blockly.JavaScript.provideFunction_(
+  var functionName = Blockly.Drools.provideFunction_(
       'colour_random',
-      [ 'function ' + Blockly.JavaScript.FUNCTION_NAME_PLACEHOLDER_ + '() {',
+      [ 'function ' + Blockly.Drools.FUNCTION_NAME_PLACEHOLDER_ + '() {',
         '  var num = Math.floor(Math.random() * Math.pow(2, 24));',
         '  return \'#\' + (\'00000\' + num.toString(16)).substr(-6);',
         '}']);
   var code = functionName + '()';
-  return [code, Blockly.JavaScript.ORDER_FUNCTION_CALL];
+  return [code, Blockly.Drools.ORDER_FUNCTION_CALL];
 };
 
-Blockly.JavaScript['colour_rgb'] = function(block) {
+Blockly.Drools['colour_rgb'] = function(block) {
   // Compose a colour from RGB components expressed as percentages.
-  var red = Blockly.JavaScript.valueToCode(block, 'RED',
-      Blockly.JavaScript.ORDER_COMMA) || 0;
-  var green = Blockly.JavaScript.valueToCode(block, 'GREEN',
-      Blockly.JavaScript.ORDER_COMMA) || 0;
-  var blue = Blockly.JavaScript.valueToCode(block, 'BLUE',
-      Blockly.JavaScript.ORDER_COMMA) || 0;
-  var functionName = Blockly.JavaScript.provideFunction_(
+  var red = Blockly.Drools.valueToCode(block, 'RED',
+      Blockly.Drools.ORDER_COMMA) || 0;
+  var green = Blockly.Drools.valueToCode(block, 'GREEN',
+      Blockly.Drools.ORDER_COMMA) || 0;
+  var blue = Blockly.Drools.valueToCode(block, 'BLUE',
+      Blockly.Drools.ORDER_COMMA) || 0;
+  var functionName = Blockly.Drools.provideFunction_(
       'colour_rgb',
-      [ 'function ' + Blockly.JavaScript.FUNCTION_NAME_PLACEHOLDER_ +
+      [ 'function ' + Blockly.Drools.FUNCTION_NAME_PLACEHOLDER_ +
           '(r, g, b) {',
         '  r = Math.max(Math.min(Number(r), 100), 0) * 2.55;',
         '  g = Math.max(Math.min(Number(g), 100), 0) * 2.55;',
@@ -68,20 +68,20 @@ Blockly.JavaScript['colour_rgb'] = function(block) {
         '  return \'#\' + r + g + b;',
         '}']);
   var code = functionName + '(' + red + ', ' + green + ', ' + blue + ')';
-  return [code, Blockly.JavaScript.ORDER_FUNCTION_CALL];
+  return [code, Blockly.Drools.ORDER_FUNCTION_CALL];
 };
 
-Blockly.JavaScript['colour_blend'] = function(block) {
+Blockly.Drools['colour_blend'] = function(block) {
   // Blend two colours together.
-  var c1 = Blockly.JavaScript.valueToCode(block, 'COLOUR1',
-      Blockly.JavaScript.ORDER_COMMA) || '\'#000000\'';
-  var c2 = Blockly.JavaScript.valueToCode(block, 'COLOUR2',
-      Blockly.JavaScript.ORDER_COMMA) || '\'#000000\'';
-  var ratio = Blockly.JavaScript.valueToCode(block, 'RATIO',
-      Blockly.JavaScript.ORDER_COMMA) || 0.5;
-  var functionName = Blockly.JavaScript.provideFunction_(
+  var c1 = Blockly.Drools.valueToCode(block, 'COLOUR1',
+      Blockly.Drools.ORDER_COMMA) || '\'#000000\'';
+  var c2 = Blockly.Drools.valueToCode(block, 'COLOUR2',
+      Blockly.Drools.ORDER_COMMA) || '\'#000000\'';
+  var ratio = Blockly.Drools.valueToCode(block, 'RATIO',
+      Blockly.Drools.ORDER_COMMA) || 0.5;
+  var functionName = Blockly.Drools.provideFunction_(
       'colour_blend',
-      [ 'function ' + Blockly.JavaScript.FUNCTION_NAME_PLACEHOLDER_ +
+      [ 'function ' + Blockly.Drools.FUNCTION_NAME_PLACEHOLDER_ +
           '(c1, c2, ratio) {',
         '  ratio = Math.max(Math.min(Number(ratio), 1), 0);',
         '  var r1 = parseInt(c1.substring(1, 3), 16);',
@@ -99,5 +99,5 @@ Blockly.JavaScript['colour_blend'] = function(block) {
         '  return \'#\' + r + g + b;',
         '}']);
   var code = functionName + '(' + c1 + ', ' + c2 + ', ' + ratio + ')';
-  return [code, Blockly.JavaScript.ORDER_FUNCTION_CALL];
+  return [code, Blockly.Drools.ORDER_FUNCTION_CALL];
 };

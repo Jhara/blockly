@@ -19,37 +19,37 @@
  */
 
 /**
- * @fileoverview Generating JavaScript for logic blocks.
+ * @fileoverview Generating Drools for logic blocks.
  * @author q.neutron@gmail.com (Quynh Neutron)
  */
 'use strict';
 
-goog.provide('Blockly.JavaScript.logic');
+goog.provide('Blockly.Drools.logic');
 
-goog.require('Blockly.JavaScript');
+goog.require('Blockly.Drools');
 
 
-Blockly.JavaScript['controls_if'] = function(block) {
+Blockly.Drools['controls_if'] = function(block) {
   // If/elseif/else condition.
   var n = 0;
-  var argument = Blockly.JavaScript.valueToCode(block, 'IF' + n,
-      Blockly.JavaScript.ORDER_NONE) || 'false';
-  var branch = Blockly.JavaScript.statementToCode(block, 'DO' + n);
+  var argument = Blockly.Drools.valueToCode(block, 'IF' + n,
+      Blockly.Drools.ORDER_NONE) || 'false';
+  var branch = Blockly.Drools.statementToCode(block, 'DO' + n);
   var code = 'if (' + argument + ') {\n' + branch + '}';
   for (n = 1; n <= block.elseifCount_; n++) {
-    argument = Blockly.JavaScript.valueToCode(block, 'IF' + n,
-        Blockly.JavaScript.ORDER_NONE) || 'false';
-    branch = Blockly.JavaScript.statementToCode(block, 'DO' + n);
+    argument = Blockly.Drools.valueToCode(block, 'IF' + n,
+        Blockly.Drools.ORDER_NONE) || 'false';
+    branch = Blockly.Drools.statementToCode(block, 'DO' + n);
     code += ' else if (' + argument + ') {\n' + branch + '}';
   }
   if (block.elseCount_) {
-    branch = Blockly.JavaScript.statementToCode(block, 'ELSE');
+    branch = Blockly.Drools.statementToCode(block, 'ELSE');
     code += ' else {\n' + branch + '}';
   }
   return code + '\n';
 };
 
-Blockly.JavaScript['logic_compare'] = function(block) {
+Blockly.Drools['logic_compare'] = function(block) {
   // Comparison operator.
   var OPERATORS = {
     'EQ': '==',
@@ -61,20 +61,20 @@ Blockly.JavaScript['logic_compare'] = function(block) {
   };
   var operator = OPERATORS[block.getFieldValue('OP')];
   var order = (operator == '==' || operator == '!=') ?
-      Blockly.JavaScript.ORDER_EQUALITY : Blockly.JavaScript.ORDER_RELATIONAL;
-  var argument0 = Blockly.JavaScript.valueToCode(block, 'A', order) || '0';
-  var argument1 = Blockly.JavaScript.valueToCode(block, 'B', order) || '0';
+      Blockly.Drools.ORDER_EQUALITY : Blockly.Drools.ORDER_RELATIONAL;
+  var argument0 = Blockly.Drools.valueToCode(block, 'A', order) || '0';
+  var argument1 = Blockly.Drools.valueToCode(block, 'B', order) || '0';
   var code = argument0 + ' ' + operator + ' ' + argument1;
   return [code, order];
 };
 
-Blockly.JavaScript['logic_operation'] = function(block) {
+Blockly.Drools['logic_operation'] = function(block) {
   // Operations 'and', 'or'.
-  var operator = (block.getFieldValue('OP') == 'AND') ? '&&' : '||';
-  var order = (operator == '&&') ? Blockly.JavaScript.ORDER_LOGICAL_AND :
-      Blockly.JavaScript.ORDER_LOGICAL_OR;
-  var argument0 = Blockly.JavaScript.valueToCode(block, 'A', order);
-  var argument1 = Blockly.JavaScript.valueToCode(block, 'B', order);
+  var operator = (block.getFieldValue('OP') == 'AND') ? ',' : '||';
+  var order = (operator == ',') ? Blockly.Drools.ORDER_LOGICAL_AND :
+      Blockly.Drools.ORDER_LOGICAL_OR;
+  var argument0 = logicalOperationDrools(block, 'A', order);
+  var argument1 = logicalOperationDrools(block, 'B', order);
   if (!argument0 && !argument1) {
     // If there are no arguments, then the return value is false.
     argument0 = 'false';
@@ -89,38 +89,69 @@ Blockly.JavaScript['logic_operation'] = function(block) {
       argument1 = defaultArgument;
     }
   }
+
   var code = argument0 + ' ' + operator + ' ' + argument1;
   return [code, order];
 };
 
-Blockly.JavaScript['logic_negate'] = function(block) {
+
+function logicalOperationDrools(block, name, order){
+  if (isNaN(order)) {
+    throw 'Expecting valid order from block "' + block.type + '".';
+  }
+  var targetBlock = block.getInputTargetBlock(name);
+  if (!targetBlock) {
+    return '';
+  }
+  var tuple = Blockly.Drools.blockToCode(targetBlock);
+  if (tuple === '') {
+    return '';
+  }
+  if (!goog.isArray(tuple)) {
+    throw 'Expecting tuple from value block "' + targetBlock.type + '".';
+  }
+  var code = tuple[0];
+  var innerOrder = tuple[1];
+  if (isNaN(innerOrder)) {
+    throw 'Expecting valid order from value block "' + targetBlock.type + '".';
+  }
+
+  if(order == Blockly.Drools.ORDER_LOGICAL_AND && innerOrder == Blockly.Drools.ORDER_LOGICAL_OR){
+    code = '(' + code.replace(/,/g, '&&') + ')';
+  } else if(order == Blockly.Drools.ORDER_LOGICAL_OR && innerOrder == Blockly.Drools.ORDER_LOGICAL_AND){
+    code = '(' + code.replace(/,/g, '&&') + ')';
+  }
+  return code;
+}
+
+Blockly.Drools['logic_negate'] = function(block) {
   // Negation.
-  var order = Blockly.JavaScript.ORDER_LOGICAL_NOT;
-  var argument0 = Blockly.JavaScript.valueToCode(block, 'BOOL', order) ||
+  var order = Blockly.Drools.ORDER_LOGICAL_NOT;
+  var argument0 = Blockly.Drools.valueToCode(block, 'BOOL', order) ||
       'true';
   var code = '!' + argument0;
   return [code, order];
 };
 
-Blockly.JavaScript['logic_boolean'] = function(block) {
+Blockly.Drools['logic_boolean'] = function(block) {
   // Boolean values true and false.
   var code = (block.getFieldValue('BOOL') == 'TRUE') ? 'true' : 'false';
-  return [code, Blockly.JavaScript.ORDER_ATOMIC];
+  return [code, Blockly.Drools.ORDER_ATOMIC];
 };
 
-Blockly.JavaScript['logic_null'] = function(block) {
+Blockly.Drools['logic_null'] = function(block) {
   // Null data type.
-  return ['null', Blockly.JavaScript.ORDER_ATOMIC];
+  return ['null', Blockly.Drools.ORDER_ATOMIC];
 };
 
-Blockly.JavaScript['logic_ternary'] = function(block) {
+Blockly.Drools['logic_ternary'] = function(block) {
   // Ternary operator.
-  var value_if = Blockly.JavaScript.valueToCode(block, 'IF',
-      Blockly.JavaScript.ORDER_CONDITIONAL) || 'false';
-  var value_then = Blockly.JavaScript.valueToCode(block, 'THEN',
-      Blockly.JavaScript.ORDER_CONDITIONAL) || 'null';
-  var value_else = Blockly.JavaScript.valueToCode(block, 'ELSE',
-      Blockly.JavaScript.ORDER_CONDITIONAL) || 'null';
+  var value_if = Blockly.Drools.valueToCode(block, 'IF',
+      Blockly.Drools.ORDER_CONDITIONAL) || 'false';
+  var value_then = Blockly.Drools.valueToCode(block, 'THEN',
+      Blockly.Drools.ORDER_CONDITIONAL) || 'null';
+  var value_else = Blockly.Drools.valueToCode(block, 'ELSE',
+      Blockly.Drools.ORDER_CONDITIONAL) || 'null';
   var code = value_if + ' ? ' + value_then + ' : ' + value_else;
-  return [code, Blockly.JavaScript.ORDER_CONDITIONAL];
+  return [code, Blockly.Drools.ORDER_CONDITIONAL];
 };
