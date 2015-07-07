@@ -70,6 +70,31 @@ Blockly.Drools['logic_compare'] = function(block) {
 
 Blockly.Drools['logic_operation'] = function(block) {
   // Operations 'and', 'or'.
+  var operator = (block.getFieldValue('OP') == 'AND') ? '&&' : '||';
+  var order = (operator == '&&') ? Blockly.Drools.ORDER_LOGICAL_AND :
+      Blockly.Drools.ORDER_LOGICAL_OR;
+  var argument0 = Blockly.Drools.valueToCode(block, 'A', order);
+  var argument1 = Blockly.Drools.valueToCode(block, 'B', order);
+  if (!argument0 && !argument1) {
+    // If there are no arguments, then the return value is false.
+    argument0 = 'false';
+    argument1 = 'false';
+  } else {
+    // Single missing arguments have no effect on the return value.
+    var defaultArgument = (operator == '&&') ? 'true' : 'false';
+    if (!argument0) {
+      argument0 = defaultArgument;
+    }
+    if (!argument1) {
+      argument1 = defaultArgument;
+    }
+  }
+  var code = argument0 + ' ' + operator + ' ' + argument1;
+  return [code, order];
+};
+
+Blockly.Drools['logic_operation_drools'] = function(block) {
+  // Operations 'and', 'or'.
   var operator = (block.getFieldValue('OP') == 'AND') ? ',' : '||';
   var order = (operator == ',') ? Blockly.Drools.ORDER_LOGICAL_AND :
       Blockly.Drools.ORDER_LOGICAL_OR;
@@ -81,7 +106,7 @@ Blockly.Drools['logic_operation'] = function(block) {
     argument1 = 'false';
   } else {
     // Single missing arguments have no effect on the return value.
-    var defaultArgument = (operator == '&&') ? 'true' : 'false';
+    var defaultArgument = (operator == ',') ? 'true' : 'false';
     if (!argument0) {
       argument0 = defaultArgument;
     }
