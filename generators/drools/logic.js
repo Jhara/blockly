@@ -93,7 +93,7 @@ Blockly.Drools['logic_operation'] = function(block) {
   return [code, order];
 };
 
-Blockly.Drools['logic_operation_drools'] = function(block) {
+Blockly.Drools['logic_operation_drools_constraints'] = function(block) {
   // Operations 'and', 'or'.
   var operator = (block.getFieldValue('OP') == 'AND') ? ',' : '||';
   var order = (operator == ',') ? Blockly.Drools.ORDER_LOGICAL_AND :
@@ -147,7 +147,19 @@ function logicalOperationDrools(block, name, order){
     code = '(' + code.replace(/,/g, '&&') + ')';
   }
   return code;
-}
+};
+
+Blockly.Drools['logic_operation_drools_facts'] = function(block) {
+  // Operations 'and', 'or'.
+  var operator = (block.getFieldValue('OP') == 'AND') ? 'and' : 'or';
+  var order = (operator == 'and') ? Blockly.Drools.ORDER_LOGICAL_AND :
+      Blockly.Drools.ORDER_LOGICAL_OR;
+  var argument0 = Blockly.Drools.valueToCode(block, 'A', order);
+  var argument1 = Blockly.Drools.valueToCode(block, 'B', order);
+  var code = argument0 + ' ' + operator + ' ' + argument1;
+  return [code, order];
+};
+
 
 Blockly.Drools['logic_negate'] = function(block) {
   // Negation.

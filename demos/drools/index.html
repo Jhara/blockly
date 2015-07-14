@@ -62,30 +62,43 @@
 <button onClick="showCode()">Drools Generator</button>
   <div id="blocklyDiv" style="height: 480px; width: 1024px;"></div>
   <xml id="toolbox" style="display: none">
-    <category name="Rule Base">
-      <block type="rule_base"></block>
-      <block type="print_RHS"></block>
-    </category>
-    <category name="Objects">
-      <category name="Persona">
-        <block type="fact"></block>
-        <block type="fact_att_edad"></block>
-        <block type="fact_att_sexo"></block>
+    <category name="Drools">
+      <category name="Rule Base">
+        <block type="rule_base"></block>
+        <block type="print_RHS"></block>
+      </category>
+      <category name="Logic">
+        <block type="logic_operation_drools_constraints"></block>
+        <block type="logic_operation_drools_facts"></block>
+      </category>
+      <category name="Objects">
+        <category name="Persona">
+          <block type="fact_persona"></block>
+          <block type="att_persona_this"></block>
+          <block type="att_persona_edad"></block>
+          <block type="att_persona_sexo"></block>
+        </category>
+        <category name="Direccion">
+          <block type="fact_direccion"></block>
+          <block type="att_direccion_this"></block>
+          <block type="att_direccion_calle"></block>
+        </category>
       </category>
     </category>
 
-    <category name="Drools">
-      <category name="logic">
-        <block type="logic_operation_drools"></block>
+    <category name="Expresion">
+      <category name="Logic">
+        <block type="logic_compare"></block>
+        <block type="logic_operation"></block>
+      </category>
+      <category name="Math">
+        <block type="math_number"></block>
+      </category>
+      <category name="Text">
+        <block type="text"></block>
       </category>
     </category>
-    <category name="Logic">
-      <block type="logic_compare"></block>
-      <block type="logic_operation"></block>
-    </category>
-    <category name="Math">
-      <block type="math_number"></block>
-    </category>
+
   </xml>
 
   <script>

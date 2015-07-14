@@ -6,7 +6,7 @@ goog.require('Blockly.Blocks');
 
 
 
-Blockly.Blocks['logic_operation_drools'] = {
+Blockly.Blocks['logic_operation_drools_constraints'] = {
   /**
    * Block for logical operations: 'and', 'or'.
    * @this Blockly.Block
@@ -24,6 +24,37 @@ Blockly.Blocks['logic_operation_drools'] = {
         .setCheck('Boolean')
         .appendField(new Blockly.FieldDropdown(OPERATORS), 'OP');
     this.setInputsInline(true);
+    // Assign 'this' to a variable for use in the tooltip closure below.
+    var thisBlock = this;
+    this.setTooltip(function() {
+      var op = thisBlock.getFieldValue('OP');
+      var TOOLTIPS = {
+        'AND': Blockly.Msg.LOGIC_OPERATION_TOOLTIP_AND,
+        'OR': Blockly.Msg.LOGIC_OPERATION_TOOLTIP_OR
+      };
+      return TOOLTIPS[op];
+    });
+  }
+};
+
+Blockly.Blocks['logic_operation_drools_facts'] = {
+  /**
+   * Block for logical operations: 'and', 'or'.
+   * @this Blockly.Block
+   */
+  init: function() {
+    var OPERATORS =
+        [[Blockly.Msg.LOGIC_OPERATION_AND, 'AND'],
+         [Blockly.Msg.LOGIC_OPERATION_OR, 'OR']];
+    this.setHelpUrl(Blockly.Msg.LOGIC_OPERATION_HELPURL);
+    this.setColour(220);
+    this.setPreviousStatement(true);
+    this.appendStatementInput('A')
+        .setCheck(null);
+    this.appendStatementInput('B')
+        .setCheck(null)
+        .appendField(new Blockly.FieldDropdown(OPERATORS), 'OP');
+    this.setInputsInline(false);
     // Assign 'this' to a variable for use in the tooltip closure below.
     var thisBlock = this;
     this.setTooltip(function() {
