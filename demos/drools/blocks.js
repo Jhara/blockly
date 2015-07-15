@@ -134,7 +134,6 @@ function crearBloqueAtributo(nombreAtributo){
 
 }
 
-
 ///////// Blocks //////////////////////
 
 Blockly.Blocks['rule_base'] = {
@@ -148,7 +147,7 @@ Blockly.Blocks['rule_base'] = {
             .setCheck(null);
         this.appendValueInput("RHS")
             .setCheck("then_rule")
-            .appendField("Inconsistency");
+            .appendField("Then");
     }
 };
 
@@ -190,7 +189,6 @@ Blockly.Blocks['fact_persona'] = {
   name: 'Persona',
   init: function() {
     this.appendValueInput("FACT_NAME")
-        .setCheck(['personathis'])
         .appendField(new Blockly.FieldTextInput(""), "FACT_VAR")
         .appendField("Persona");
     this.setPreviousStatement(true);
@@ -200,7 +198,6 @@ Blockly.Blocks['fact_persona'] = {
 };
 
 Blockly.Drools['fact_persona'] = function(block) {
-  console.log('Block ', block);
   var text_fact_var = block.getFieldValue('FACT_VAR');
   var value_fact_name = Blockly.Drools.valueToCode(block, 'FACT_NAME', Blockly.Drools.ORDER_NONE)||'';
   var code = (text_fact_var != ''?text_fact_var+': ':'')+block.name+' ('+value_fact_name+')\n';
@@ -215,7 +212,7 @@ Blockly.Blocks['att_persona_this'] = {
         .appendField(new Blockly.FieldTextInput(""), "FIELD_VAR")
         .appendField("this");
     this.setInputsInline(true);
-    this.setOutput(true, 'personathis');
+    this.setOutput(true);
     this.setColour(270);
   }
 };
@@ -270,6 +267,7 @@ Blockly.Blocks['fact_direccion'] = {
   name: 'Direccion',
   init: function() {
     this.appendValueInput("FACT_NAME")
+        .setCheck(['direccion.this', 'direccion.calle'])
         .appendField(new Blockly.FieldTextInput(""), "FACT_VAR")
         .appendField("Direccion");
     this.setPreviousStatement(true);
@@ -405,7 +403,7 @@ Blockly.Drools['var_rule'] = function(block) {
     return code.trim();
 };
 
-Blockly.Drools['logic_concepts_compare'] = function(block) {
+Blockly.Drools['logic_operation_drools_facts'] = function(block) {
     var operator = (block.getFieldValue('OP') == 'AND') ? 'and' : 'or';
     var statements_atributo = Blockly.Drools.statementToCode(block, 'A');
     var statements_condicion = Blockly.Drools.statementToCode(block, 'B');

@@ -16,7 +16,7 @@ Blockly.Blocks['logic_operation_drools_constraints'] = {
         [[Blockly.Msg.LOGIC_OPERATION_AND, 'AND'],
          [Blockly.Msg.LOGIC_OPERATION_OR, 'OR']];
     this.setHelpUrl(Blockly.Msg.LOGIC_OPERATION_HELPURL);
-    this.setColour(220);
+    this.setColour(330);
     this.setOutput(true, 'Boolean');
     this.appendValueInput('A')
         .setCheck('Boolean');
@@ -52,7 +52,7 @@ Blockly.Blocks['logic_operation_drools_facts'] = {
         this.appendStatementInput("B")
             .appendField("")
             .setCheck(null);
-        this.setPreviousStatement(true, ['logic_concepts_compare', 'rule_base']);
+        this.setPreviousStatement(true, ['logic_operation_drools_facts', 'rule_base']);
         this.setTooltip('');
     }
 };
