@@ -145,7 +145,7 @@ Blockly.Blocks['rule_base'] = {
             .appendField(new Blockly.FieldTextInput("rule_name"), "rule_name");
         this.appendStatementInput("LHS")
             .appendField('When')
-            .setCheck(['fact']);
+            .setCheck(null);
         this.appendValueInput("RHS")
             .setCheck("then_rule")
             .appendField("Inconsistency");
@@ -190,21 +190,21 @@ Blockly.Blocks['fact_persona'] = {
   name: 'Persona',
   init: function() {
     this.appendValueInput("FACT_NAME")
+        .setCheck(['personathis'])
         .appendField(new Blockly.FieldTextInput(""), "FACT_VAR")
         .appendField("Persona");
     this.setPreviousStatement(true);
     this.setNextStatement(true);
     this.setColour(240);
-    this.setTooltip('');
-    this.setHelpUrl('http://www.example.com/');
   }
 };
 
 Blockly.Drools['fact_persona'] = function(block) {
+  console.log('Block ', block);
   var text_fact_var = block.getFieldValue('FACT_VAR');
   var value_fact_name = Blockly.Drools.valueToCode(block, 'FACT_NAME', Blockly.Drools.ORDER_NONE)||'';
   var code = (text_fact_var != ''?text_fact_var+': ':'')+block.name+' ('+value_fact_name+')\n';
-  return [code, Blockly.Drools.ORDER_NONE];
+  return code;
 };
 
 Blockly.Blocks['att_persona_this'] = {
@@ -215,7 +215,7 @@ Blockly.Blocks['att_persona_this'] = {
         .appendField(new Blockly.FieldTextInput(""), "FIELD_VAR")
         .appendField("this");
     this.setInputsInline(true);
-    this.setOutput(true);
+    this.setOutput(true, 'personathis');
     this.setColour(270);
   }
 };
@@ -282,7 +282,7 @@ Blockly.Drools['fact_direccion'] = function(block) {
   var text_fact_var = block.getFieldValue('FACT_VAR');
   var value_fact_name = Blockly.Drools.valueToCode(block, 'FACT_NAME', Blockly.Drools.ORDER_NONE)||'';
   var code = (text_fact_var != ''?text_fact_var+': ':'')+block.name+' ('+value_fact_name+')\n';
-  return [code, Blockly.Drools.ORDER_NONE];
+  return code;
 };
 
 Blockly.Blocks['att_direccion_this'] = {
@@ -325,48 +325,6 @@ Blockly.Drools['att_direccion_calle'] = function(block) {
 
 
 /////////////////////////////////
-
-
-////////////////////LOGICAL ////////////
-/*function logicalOperationDrools(block){
-  var code = '';
-
-  var operator = (block.getFieldValue('OP') == 'AND') ? '&&' : '||';
-  var order = (operator == '&&') ? Blockly.Drools.ORDER_LOGICAL_AND : Blockly.Drools.ORDER_LOGICAL_OR;
-
-  var tupleA = Blockly.Drools.blockToCode(block.getInputTargetBlock('A'));
-  var tupleB = Blockly.Drools.blockToCode(block.getInputTargetBlock('B'));
-
-  var codeA = tupleA[0];
-  var innerOrderA = tupleA[1];
-  var codeB = tupleB[0];
-  var innerOrderB = tupleB[1];
-  console.log('innerOrderA '+innerOrderA);
-  console.log('innerOrderB '+innerOrderB);
-  console.log('order '+order);
-
-  if(innerOrderA == 13 && innerOrderB == 13 && order == 13){
-    code = codeA+','+codeB;
-  }else if(innerOrderA == 0 && innerOrderB == 0 && order == 13){
-    code = codeA+','+codeB;
-  }else if(innerOrderA == 0 && innerOrderB == 13 && order == 13){
-    code = codeA+','+codeB;
-  }else if(innerOrderA == 0 && innerOrderB == 14 && order == 13){
-    code = codeA+' '+operator+' ('+codeB+')';
-  }else if(innerOrderA == 13 && innerOrderB == 14 && order == 13){
-    code = codeA+' '+operator+' ('+codeB+')';
-  }else if(innerOrderA == 14 && innerOrderB == 14 && order == 13){
-    code = '('+codeA+') '+operator+' ('+codeB+')';
-  }else{
-    code = codeA+' '+operator+' '+codeB;
-  }
-
-  console.log('code final '+code);
-
-  return code;
-
-}*/
-
 
 ////////////////////// COMPARE ////////////////////////////////////
 
@@ -447,51 +405,12 @@ Blockly.Drools['var_rule'] = function(block) {
     return code.trim();
 };
 
-Blockly.Blocks['logic_concepts_compare'] = {
-    category: 'logic_connect',
-    init: function() {
-        this.setColour(330);
-        this.appendStatementInput("OP1")
-            .appendField("Condición")
-            .setCheck(['logic_connect', 'bloque_raiz']);
-        this.appendDummyInput()
-            .appendField(new Blockly.FieldDropdown([["and", "and"], ["or", "or"]]), "OP");
-        this.appendStatementInput("OP2")
-            .appendField("Condición")
-            .setCheck(['logic_connect','bloque_raiz']);
-        this.setPreviousStatement(true, 'logic_concepts_compare');
-        this.setTooltip('Operaciones lógicas');
-    }
-};
-
-
-
 Blockly.Drools['logic_concepts_compare'] = function(block) {
-    var dropdown_op = block.getFieldValue('OP');
-    var statements_atributo = Blockly.Drools.statementToCode(block, 'OP1');
-    var statements_condicion = Blockly.Drools.statementToCode(block, 'OP2');
-    var op1Categoria = block.getInputTargetBlock('OP1').category;
-    var op2Categoria = block.getInputTargetBlock('OP2').category;
+    var operator = (block.getFieldValue('OP') == 'AND') ? 'and' : 'or';
+    var statements_atributo = Blockly.Drools.statementToCode(block, 'A');
+    var statements_condicion = Blockly.Drools.statementToCode(block, 'B');
 
-    var code = '';
-
-    if(op1Categoria === 'Concepto' && op2Categoria === 'Concepto'){
-      if(dropdown_op === 'or'){
-        code = '('+statements_atributo+' or '+statements_condicion+')';
-      }else{
-        code = '('+statements_atributo+' and '+statements_condicion+')';
-      }
-    }
-
-    if((op1Categoria === 'Atributo' && op2Categoria === 'Atributo') ||
-       (op1Categoria === 'logic_connect' && op2Categoria === 'logic_connect') ){
-      if(dropdown_op === 'or'){
-        code = statements_atributo+' || '+statements_condicion;
-      }else{
-        code = statements_atributo+' , '+statements_condicion;
-      }
-    }
-    //var code = '"composicion": { "condicion1": ' + statements_atributo + ', "op":"' + dropdown_op + '","condicion2":' + statements_condicion + '}';
+    var code = '(' +statements_atributo+' '+operator+' '+statements_condicion+ ')\n';
 
     return code;
 };

@@ -98,8 +98,8 @@ Blockly.Drools['logic_operation_drools_constraints'] = function(block) {
   var operator = (block.getFieldValue('OP') == 'AND') ? ',' : '||';
   var order = (operator == ',') ? Blockly.Drools.ORDER_LOGICAL_AND :
       Blockly.Drools.ORDER_LOGICAL_OR;
-  var argument0 = logicalOperationDrools(block, 'A', order);
-  var argument1 = logicalOperationDrools(block, 'B', order);
+  var argument0 = logicalOperationConstraintDrools(block, 'A', order);
+  var argument1 = logicalOperationConstraintDrools(block, 'B', order);
   if (!argument0 && !argument1) {
     // If there are no arguments, then the return value is false.
     argument0 = 'false';
@@ -120,7 +120,7 @@ Blockly.Drools['logic_operation_drools_constraints'] = function(block) {
 };
 
 
-function logicalOperationDrools(block, name, order){
+function logicalOperationConstraintDrools(block, name, order){
   if (isNaN(order)) {
     throw 'Expecting valid order from block "' + block.type + '".';
   }
@@ -148,18 +148,6 @@ function logicalOperationDrools(block, name, order){
   }
   return code;
 };
-
-Blockly.Drools['logic_operation_drools_facts'] = function(block) {
-  // Operations 'and', 'or'.
-  var operator = (block.getFieldValue('OP') == 'AND') ? 'and' : 'or';
-  var order = (operator == 'and') ? Blockly.Drools.ORDER_LOGICAL_AND :
-      Blockly.Drools.ORDER_LOGICAL_OR;
-  var argument0 = Blockly.Drools.valueToCode(block, 'A', order);
-  var argument1 = Blockly.Drools.valueToCode(block, 'B', order);
-  var code = argument0 + ' ' + operator + ' ' + argument1;
-  return [code, order];
-};
-
 
 Blockly.Drools['logic_negate'] = function(block) {
   // Negation.
