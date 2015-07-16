@@ -1,0 +1,33 @@
+package com.sura.seguros.core.generador.laboratorio.politicas.drls
+
+import com.sura.seguros.core.generador.laboratorio.politicas.tipos.*
+import com.sura.seguros.core.external.services.riesgos.consultables.PipelineRC
+import com.sura.seguros.core.external.services.riesgos.consultables.domain.ConsultarRiesgoOutput
+import com.sura.seguros.core.external.services.cumulos.PipelineValidarCumuloCM
+
+
+
+// validar valor asegurado cobertura sustracción
+rule "344"
+when
+$co3: Cob_hurto(valor_asegurado > 15000000)
+$bi2: Bicicleta(coberturas contains $co3)
+$ne1: Negocio_bicicleta_segura(riesgos contains $bi2)
+
+then
+$co3.getInconsistencias().add( new Inconsistencia(344,"El valor asegurado de la cobertura hurto, sobrepasa el limite de valor asegurado permitido de $15.000.000") );
+end
+
+
+
+// Validar valor asegurado cobertura Responsabilidad Civil
+rule "343"
+when
+$co3: Cob_responsabilidad_civil(valor_asegurado > 10000000)
+$bi2: Bicicleta(coberturas contains $co3)
+$ne1: Negocio_bicicleta_segura(riesgos contains $bi2)
+
+then
+$co3.getInconsistencias().add( new Inconsistencia(343,"El valor asegurado de la cobertura responsabilidad civil, sobrepasa el limite de valor asegurado permitido de $10.000.000") );
+end
+

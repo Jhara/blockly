@@ -1,0 +1,287 @@
+package com.sura.seguros.core.generador.laboratorio.politicas.tipos
+
+import java.util.List
+import java.util.Date
+
+
+declare Bicicleta_segura
+  
+        canal: String
+            factor_fraccionamiento: Double
+            factor_gastos: Double
+            medio_venta: String
+            moneda: String
+            pais: String
+            ramo: Ramo_autos
+            inconsistencias: List
+        
+end
+
+declare Cuentahabiente 
+  
+        codigo_banco: String
+            codigo_sucursal_banco: String
+            fecha_vencimiento_tarjeta_credito: Date
+            numero_cuenta: String
+            numero_cuotas_tarjeta: String
+            numero_documento: String
+            primer_apellido: String
+            primer_nombre: String
+            segundo_apellido: String
+            segundo_nombre: String
+            tipo_documento: String
+            tipos_cuenta: String
+            inconsistencias: List
+        
+end
+
+declare Tomador_negocio_bicicleta_segura 
+  
+        celular: String
+            ciudad_residencia: String
+            direccion: String
+            email: String
+            numero_documento: String
+            primer_apellido: String
+            primer_nombre: String
+            segundo_apellido: String
+            segundo_nombre: String
+            telefono: String
+            tipo_documento: String
+            inconsistencias: List
+        
+end
+
+declare Agrupacion_negocio_bicicleta_segura 
+  
+        id_agrupacion: String
+            nombre: String
+            inconsistencias: List
+        
+end
+
+declare Cob_responsabilidad_civil extends Coberturas_riesgos_negocio_bicicleta_segura
+  
+        es_basica: Boolean
+            impuesto_prima: Double
+            prima_neta: Double
+            tasa: Double
+            tipo_reserva: String
+            valor_asegurado: Long
+            ramo: Ramo_autos
+            inconsistencias: List
+        
+end
+
+declare Ramo_autos 
+  
+        compania: String
+            impuesto: Double
+            pais: String
+            inconsistencias: List
+        
+end
+
+declare Cob_hurto extends Coberturas_riesgos_negocio_bicicleta_segura
+  
+        es_basica: Boolean
+            impuesto_prima: Double
+            prima_neta: Double
+            tasa: Double
+            tipo_reserva: String
+            valor_asegurado: Long
+            ramo: Ramo_autos
+            inconsistencias: List
+        
+end
+
+declare Bicicleta extends Riesgos_negocio_bicicleta_segura
+  
+        marco: String
+            modelo: Long
+            idagrupacion: String
+            asegurado: Asegurado_riesgos_negocio_bicicleta_segura
+            beneficiarios: List
+            plan: Bicicleta_gold
+            coberturas: List
+            inconsistencias: List
+        
+end
+
+declare Bicicleta_gold extends Bicicleta_segura
+  
+        canal: String
+            factor_fraccionamiento: Double
+            medio_venta: String
+            moneda: String
+            vigencia_plan: String
+            inconsistencias: List
+        
+end
+
+declare Ramo_vida_individual 
+  
+        compania: String
+            impuesto: Double
+            pais: String
+            inconsistencias: List
+        
+end
+
+declare Atr_cob_plataforma_canales_masivos 
+  
+        cancela_por_siniestro: Boolean
+            edad_maxima_permanencia: Long
+            orden_cobertura: Long
+            porcentaje_indemnizacion_siniestro: Long
+            tiempo_pago_siniestro: String
+            tipo_cancelacion_siniestro: String
+            inconsistencias: List
+        
+end
+
+declare Cob_invalidez_por_accidente extends Coberturas_riesgos_negocio_bicicleta_segura
+  
+        es_basica: Boolean
+            impuesto_prima: Double
+            numero_certificado: String
+            prima_neta: Double
+            tasa: Double
+            tipo_reserva: String
+            valor_asegurado: Long
+            atr_cob_plataforma_canales_masivos: Atr_cob_plataforma_canales_masivos
+            ramo: Ramo_vida_individual
+            inconsistencias: List
+        
+end
+
+declare Beneficiarios_riesgos_negocio_bicicleta_segura 
+  
+        numero_documento: String
+            porcentaje_beneficiario: Double
+            primer_apellido: String
+            primer_nombre: String
+            segundo_apellido: String
+            segundo_nombre: String
+            tipo_documento: String
+            inconsistencias: List
+        
+end
+
+declare Asegurado_riesgos_negocio_bicicleta_segura 
+  
+        celular: String
+            ciudad_residencia: String
+            direccion: String
+            numero_documento: String
+            primer_apellido: String
+            primer_nombre: String
+            segundo_apellido: String
+            segundo_nombre: String
+            telefono: String
+            tipo_documento: String
+            inconsistencias: List
+        
+end
+
+declare Persona extends Riesgos_negocio_bicicleta_segura
+  
+        edad: Long
+            sexo: String
+            idagrupacion: String
+            asegurado: Asegurado_riesgos_negocio_bicicleta_segura
+            beneficiarios: List
+            coberturas: List
+            plan: Bicicleta_gold
+            inconsistencias: List
+        
+end
+
+declare Negocio_bicicleta_segura extends Negocio
+  
+        fecha_cotizacion: Date
+            fecha_expedicion: Date
+            fecha_inicio_vigencia: Date
+            id_negocio: String
+            id_negocio_core_legacy: String
+            id_plan: String
+            id_producto: String
+            periodicidad_pago: String
+            version_reglas: String
+            riesgos: List
+            agrupacion: Agrupacion_negocio_bicicleta_segura
+            tomador: Tomador_negocio_bicicleta_segura
+            cuentahabiente: Cuentahabiente
+            inconsistencias: List
+        
+end
+
+declare Coberturas_riesgos_negocio_bicicleta_segura 
+  
+        prima_resultado_calculo: Double
+            impuesto_prima_resultado_calculo: Double
+            prima_comercial_resultado_calculo: Double
+            inconsistencias: List
+        
+end
+
+declare Riesgos_negocio_bicicleta_segura 
+  
+        prima_resultado_calculo: Double
+            coberturas: List
+            impuesto_prima_resultado_calculo: Double
+            prima_comercial_resultado_calculo: Double
+            inconsistencias: List
+        
+end
+
+declare Negocio 
+  
+        prima_resultado_calculo: Double
+            impuesto_prima_resultado_calculo: Double
+            prima_comercial_resultado_calculo: Double
+            riesgos: List
+            inconsistencias: List
+        
+end
+
+declare Inconsistencia 
+  
+        id: Integer
+            descripcion: String
+        
+end
+
+declare BanderaInconsistencias 
+  
+        nombreRegla: String
+            objeto: Object
+        
+end
+
+declare ResultadoCumuloProducto 
+  
+        tipoDocumento: String
+            numeroDocumento: String
+            respuesta: double
+        
+end
+
+declare ResultadoCumuloCobertura 
+  
+        tipoDocumento: String
+            numeroDocumento: String
+            respuesta: double
+        
+end
+
+declare ResultadoCumuloCanal 
+  
+        tipoDocumento: String
+            numeroDocumento: String
+            respuesta: double
+        
+end
+
+
+

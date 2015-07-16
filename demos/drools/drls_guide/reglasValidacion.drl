@@ -1,0 +1,815 @@
+package com.sura.seguros.core.generador.laboratorio.tarifas.drls
+
+import com.sura.seguros.core.generador.laboratorio.politicas.tipos.*
+import java.lang.Math
+
+
+rule "Validacion rangos valor entrada - periodicidad_pago - negocio_bicicleta_segura"
+    agenda-group "validacion"
+when
+  
+          
+    
+                      $var_negocio_bicicleta_segura: Negocio_bicicleta_segura(periodicidad_pago not in ("pago_anual","pago_trimestral","pago_semestral","pago_mensual"))
+        
+    
+          not(
+    
+                       BanderaInconsistencias(nombreRegla == "Validacion rangos valor entrada - periodicidad_pago - negocio_bicicleta_segura", objeto == $var_negocio_bicicleta_segura)
+        
+    )
+    
+then
+  
+      $var_negocio_bicicleta_segura.getInconsistencias().add( new Inconsistencia(0,"Dato de entrada periodicidad_pago debe estar dentro de los valores: pago_anual,pago_trimestral,pago_semestral,pago_mensual"));
+      insert(new BanderaInconsistencias("Validacion rangos valor entrada - periodicidad_pago - negocio_bicicleta_segura", $var_negocio_bicicleta_segura));
+      update($var_negocio_bicicleta_segura);
+    
+  System.out.println("Regla: 'Validacion rangos valor entrada - periodicidad_pago - negocio_bicicleta_segura'");
+end
+
+rule "Validacion rangos valor entrada - tipo_reserva - cob_responsabilidad_civil"
+    agenda-group "validacion"
+when
+  
+          
+    
+                      $var_cob_responsabilidad_civil: Cob_responsabilidad_civil(tipo_reserva not in ("reserva_tecnica"))
+        
+    
+          
+    
+                      $var_bicicleta: Bicicleta(coberturas contains $var_cob_responsabilidad_civil)
+        
+    
+          
+    
+                      $var_negocio_bicicleta_segura: Negocio_bicicleta_segura(riesgos contains $var_bicicleta)
+        
+    
+          not(
+    
+                       BanderaInconsistencias(nombreRegla == "Validacion rangos valor entrada - tipo_reserva - cob_responsabilidad_civil", objeto == $var_cob_responsabilidad_civil)
+        
+    )
+    
+then
+  
+      $var_cob_responsabilidad_civil.getInconsistencias().add( new Inconsistencia(0,"Dato de entrada tipo_reserva debe estar dentro de los valores: reserva_tecnica"));
+      insert(new BanderaInconsistencias("Validacion rangos valor entrada - tipo_reserva - cob_responsabilidad_civil", $var_cob_responsabilidad_civil));
+      update($var_cob_responsabilidad_civil);
+    
+  System.out.println("Regla: 'Validacion rangos valor entrada - tipo_reserva - cob_responsabilidad_civil'");
+end
+
+rule "Validacion rangos valor entrada - pais - ramo_autos"
+    agenda-group "validacion"
+when
+  
+          
+    
+                      $var_ramo_autos: Ramo_autos(pais not in ("co"))
+        
+    
+          
+    
+                      $var_cob_responsabilidad_civil: Cob_responsabilidad_civil(ramo == $var_ramo_autos)
+        
+    
+          
+    
+                      $var_bicicleta: Bicicleta(coberturas contains $var_cob_responsabilidad_civil)
+        
+    
+          
+    
+                      $var_negocio_bicicleta_segura: Negocio_bicicleta_segura(riesgos contains $var_bicicleta)
+        
+    
+          not(
+    
+                       BanderaInconsistencias(nombreRegla == "Validacion rangos valor entrada - pais - ramo_autos", objeto == $var_ramo_autos)
+        
+    )
+    
+then
+  
+      $var_ramo_autos.getInconsistencias().add( new Inconsistencia(0,"Dato de entrada pais debe estar dentro de los valores: co"));
+      insert(new BanderaInconsistencias("Validacion rangos valor entrada - pais - ramo_autos", $var_ramo_autos));
+      update($var_ramo_autos);
+    
+  System.out.println("Regla: 'Validacion rangos valor entrada - pais - ramo_autos'");
+end
+
+rule "Validacion rangos valor entrada - impuesto - ramo_autos"
+    agenda-group "validacion"
+when
+  
+          
+    
+                      $var_ramo_autos: Ramo_autos(impuesto not in (16))
+        
+    
+          
+    
+                      $var_cob_responsabilidad_civil: Cob_responsabilidad_civil(ramo == $var_ramo_autos)
+        
+    
+          
+    
+                      $var_bicicleta: Bicicleta(coberturas contains $var_cob_responsabilidad_civil)
+        
+    
+          
+    
+                      $var_negocio_bicicleta_segura: Negocio_bicicleta_segura(riesgos contains $var_bicicleta)
+        
+    
+          not(
+    
+                       BanderaInconsistencias(nombreRegla == "Validacion rangos valor entrada - impuesto - ramo_autos", objeto == $var_ramo_autos)
+        
+    )
+    
+then
+  
+      $var_ramo_autos.getInconsistencias().add( new Inconsistencia(0,"Dato de entrada impuesto debe estar dentro de los valores: 16"));
+      insert(new BanderaInconsistencias("Validacion rangos valor entrada - impuesto - ramo_autos", $var_ramo_autos));
+      update($var_ramo_autos);
+    
+  System.out.println("Regla: 'Validacion rangos valor entrada - impuesto - ramo_autos'");
+end
+
+rule "Validacion rangos valor entrada - compania - ramo_autos"
+    agenda-group "validacion"
+when
+  
+          
+    
+                      $var_ramo_autos: Ramo_autos(compania not in ("seguros_generales_suramericana"))
+        
+    
+          
+    
+                      $var_cob_responsabilidad_civil: Cob_responsabilidad_civil(ramo == $var_ramo_autos)
+        
+    
+          
+    
+                      $var_bicicleta: Bicicleta(coberturas contains $var_cob_responsabilidad_civil)
+        
+    
+          
+    
+                      $var_negocio_bicicleta_segura: Negocio_bicicleta_segura(riesgos contains $var_bicicleta)
+        
+    
+          not(
+    
+                       BanderaInconsistencias(nombreRegla == "Validacion rangos valor entrada - compania - ramo_autos", objeto == $var_ramo_autos)
+        
+    )
+    
+then
+  
+      $var_ramo_autos.getInconsistencias().add( new Inconsistencia(0,"Dato de entrada compania debe estar dentro de los valores: seguros_generales_suramericana"));
+      insert(new BanderaInconsistencias("Validacion rangos valor entrada - compania - ramo_autos", $var_ramo_autos));
+      update($var_ramo_autos);
+    
+  System.out.println("Regla: 'Validacion rangos valor entrada - compania - ramo_autos'");
+end
+
+rule "Validacion rangos valor entrada - tipo_reserva - cob_hurto"
+    agenda-group "validacion"
+when
+  
+          
+    
+                      $var_cob_hurto: Cob_hurto(tipo_reserva not in ("reserva_tecnica"))
+        
+    
+          
+    
+                      $var_bicicleta: Bicicleta(coberturas contains $var_cob_hurto)
+        
+    
+          
+    
+                      $var_negocio_bicicleta_segura: Negocio_bicicleta_segura(riesgos contains $var_bicicleta)
+        
+    
+          not(
+    
+                       BanderaInconsistencias(nombreRegla == "Validacion rangos valor entrada - tipo_reserva - cob_hurto", objeto == $var_cob_hurto)
+        
+    )
+    
+then
+  
+      $var_cob_hurto.getInconsistencias().add( new Inconsistencia(0,"Dato de entrada tipo_reserva debe estar dentro de los valores: reserva_tecnica"));
+      insert(new BanderaInconsistencias("Validacion rangos valor entrada - tipo_reserva - cob_hurto", $var_cob_hurto));
+      update($var_cob_hurto);
+    
+  System.out.println("Regla: 'Validacion rangos valor entrada - tipo_reserva - cob_hurto'");
+end
+
+rule "Validacion rangos valor entrada - pais - ramo_autos-6"
+    agenda-group "validacion"
+when
+  
+          
+    
+                      $var_ramo_autos: Ramo_autos(pais not in ("co"))
+        
+    
+          
+    
+                      $var_cob_hurto: Cob_hurto(ramo == $var_ramo_autos)
+        
+    
+          
+    
+                      $var_bicicleta: Bicicleta(coberturas contains $var_cob_hurto)
+        
+    
+          
+    
+                      $var_negocio_bicicleta_segura: Negocio_bicicleta_segura(riesgos contains $var_bicicleta)
+        
+    
+          not(
+    
+                       BanderaInconsistencias(nombreRegla == "Validacion rangos valor entrada - pais - ramo_autos", objeto == $var_ramo_autos)
+        
+    )
+    
+then
+  
+      $var_ramo_autos.getInconsistencias().add( new Inconsistencia(0,"Dato de entrada pais debe estar dentro de los valores: co"));
+      insert(new BanderaInconsistencias("Validacion rangos valor entrada - pais - ramo_autos", $var_ramo_autos));
+      update($var_ramo_autos);
+    
+  System.out.println("Regla: 'Validacion rangos valor entrada - pais - ramo_autos-6'");
+end
+
+rule "Validacion rangos valor entrada - impuesto - ramo_autos-7"
+    agenda-group "validacion"
+when
+  
+          
+    
+                      $var_ramo_autos: Ramo_autos(impuesto not in (16))
+        
+    
+          
+    
+                      $var_cob_hurto: Cob_hurto(ramo == $var_ramo_autos)
+        
+    
+          
+    
+                      $var_bicicleta: Bicicleta(coberturas contains $var_cob_hurto)
+        
+    
+          
+    
+                      $var_negocio_bicicleta_segura: Negocio_bicicleta_segura(riesgos contains $var_bicicleta)
+        
+    
+          not(
+    
+                       BanderaInconsistencias(nombreRegla == "Validacion rangos valor entrada - impuesto - ramo_autos", objeto == $var_ramo_autos)
+        
+    )
+    
+then
+  
+      $var_ramo_autos.getInconsistencias().add( new Inconsistencia(0,"Dato de entrada impuesto debe estar dentro de los valores: 16"));
+      insert(new BanderaInconsistencias("Validacion rangos valor entrada - impuesto - ramo_autos", $var_ramo_autos));
+      update($var_ramo_autos);
+    
+  System.out.println("Regla: 'Validacion rangos valor entrada - impuesto - ramo_autos-7'");
+end
+
+rule "Validacion rangos valor entrada - compania - ramo_autos-8"
+    agenda-group "validacion"
+when
+  
+          
+    
+                      $var_ramo_autos: Ramo_autos(compania not in ("seguros_generales_suramericana"))
+        
+    
+          
+    
+                      $var_cob_hurto: Cob_hurto(ramo == $var_ramo_autos)
+        
+    
+          
+    
+                      $var_bicicleta: Bicicleta(coberturas contains $var_cob_hurto)
+        
+    
+          
+    
+                      $var_negocio_bicicleta_segura: Negocio_bicicleta_segura(riesgos contains $var_bicicleta)
+        
+    
+          not(
+    
+                       BanderaInconsistencias(nombreRegla == "Validacion rangos valor entrada - compania - ramo_autos", objeto == $var_ramo_autos)
+        
+    )
+    
+then
+  
+      $var_ramo_autos.getInconsistencias().add( new Inconsistencia(0,"Dato de entrada compania debe estar dentro de los valores: seguros_generales_suramericana"));
+      insert(new BanderaInconsistencias("Validacion rangos valor entrada - compania - ramo_autos", $var_ramo_autos));
+      update($var_ramo_autos);
+    
+  System.out.println("Regla: 'Validacion rangos valor entrada - compania - ramo_autos-8'");
+end
+
+rule "Validacion rangos valor entrada - vigencia_plan - bicicleta_gold"
+    agenda-group "validacion"
+when
+  
+          
+    
+                      $var_bicicleta_gold: Bicicleta_gold(vigencia_plan not in ("vigencia_anual"))
+        
+    
+          
+    
+                      $var_bicicleta: Bicicleta(plan == $var_bicicleta_gold)
+        
+    
+          
+    
+                      $var_negocio_bicicleta_segura: Negocio_bicicleta_segura(riesgos contains $var_bicicleta)
+        
+    
+          not(
+    
+                       BanderaInconsistencias(nombreRegla == "Validacion rangos valor entrada - vigencia_plan - bicicleta_gold", objeto == $var_bicicleta_gold)
+        
+    )
+    
+then
+  
+      $var_bicicleta_gold.getInconsistencias().add( new Inconsistencia(0,"Dato de entrada vigencia_plan debe estar dentro de los valores: vigencia_anual"));
+      insert(new BanderaInconsistencias("Validacion rangos valor entrada - vigencia_plan - bicicleta_gold", $var_bicicleta_gold));
+      update($var_bicicleta_gold);
+    
+  System.out.println("Regla: 'Validacion rangos valor entrada - vigencia_plan - bicicleta_gold'");
+end
+
+rule "Validacion rangos valor entrada - moneda - bicicleta_gold"
+    agenda-group "validacion"
+when
+  
+          
+    
+                      $var_bicicleta_gold: Bicicleta_gold(moneda not in ("cop"))
+        
+    
+          
+    
+                      $var_bicicleta: Bicicleta(plan == $var_bicicleta_gold)
+        
+    
+          
+    
+                      $var_negocio_bicicleta_segura: Negocio_bicicleta_segura(riesgos contains $var_bicicleta)
+        
+    
+          not(
+    
+                       BanderaInconsistencias(nombreRegla == "Validacion rangos valor entrada - moneda - bicicleta_gold", objeto == $var_bicicleta_gold)
+        
+    )
+    
+then
+  
+      $var_bicicleta_gold.getInconsistencias().add( new Inconsistencia(0,"Dato de entrada moneda debe estar dentro de los valores: cop"));
+      insert(new BanderaInconsistencias("Validacion rangos valor entrada - moneda - bicicleta_gold", $var_bicicleta_gold));
+      update($var_bicicleta_gold);
+    
+  System.out.println("Regla: 'Validacion rangos valor entrada - moneda - bicicleta_gold'");
+end
+
+rule "Validacion rangos valor entrada - medio_venta - bicicleta_gold"
+    agenda-group "validacion"
+when
+  
+          
+    
+                      $var_bicicleta_gold: Bicicleta_gold(medio_venta not in ("mv_televentas"))
+        
+    
+          
+    
+                      $var_bicicleta: Bicicleta(plan == $var_bicicleta_gold)
+        
+    
+          
+    
+                      $var_negocio_bicicleta_segura: Negocio_bicicleta_segura(riesgos contains $var_bicicleta)
+        
+    
+          not(
+    
+                       BanderaInconsistencias(nombreRegla == "Validacion rangos valor entrada - medio_venta - bicicleta_gold", objeto == $var_bicicleta_gold)
+        
+    )
+    
+then
+  
+      $var_bicicleta_gold.getInconsistencias().add( new Inconsistencia(0,"Dato de entrada medio_venta debe estar dentro de los valores: mv_televentas"));
+      insert(new BanderaInconsistencias("Validacion rangos valor entrada - medio_venta - bicicleta_gold", $var_bicicleta_gold));
+      update($var_bicicleta_gold);
+    
+  System.out.println("Regla: 'Validacion rangos valor entrada - medio_venta - bicicleta_gold'");
+end
+
+rule "Validacion rangos valor entrada - canal - bicicleta_gold"
+    agenda-group "validacion"
+when
+  
+          
+    
+                      $var_bicicleta_gold: Bicicleta_gold(canal not in ("canal_bancaseguros"))
+        
+    
+          
+    
+                      $var_bicicleta: Bicicleta(plan == $var_bicicleta_gold)
+        
+    
+          
+    
+                      $var_negocio_bicicleta_segura: Negocio_bicicleta_segura(riesgos contains $var_bicicleta)
+        
+    
+          not(
+    
+                       BanderaInconsistencias(nombreRegla == "Validacion rangos valor entrada - canal - bicicleta_gold", objeto == $var_bicicleta_gold)
+        
+    )
+    
+then
+  
+      $var_bicicleta_gold.getInconsistencias().add( new Inconsistencia(0,"Dato de entrada canal debe estar dentro de los valores: canal_bancaseguros"));
+      insert(new BanderaInconsistencias("Validacion rangos valor entrada - canal - bicicleta_gold", $var_bicicleta_gold));
+      update($var_bicicleta_gold);
+    
+  System.out.println("Regla: 'Validacion rangos valor entrada - canal - bicicleta_gold'");
+end
+
+rule "Validacion rangos valor entrada - marco - bicicleta"
+    agenda-group "validacion"
+when
+  
+          
+    
+                      $var_bicicleta: Bicicleta(marco not in ("trek","gw","specialized","benoto","giant"))
+        
+    
+          
+    
+                      $var_negocio_bicicleta_segura: Negocio_bicicleta_segura(riesgos contains $var_bicicleta)
+        
+    
+          not(
+    
+                       BanderaInconsistencias(nombreRegla == "Validacion rangos valor entrada - marco - bicicleta", objeto == $var_bicicleta)
+        
+    )
+    
+then
+  
+      $var_bicicleta.getInconsistencias().add( new Inconsistencia(0,"Dato de entrada marco debe estar dentro de los valores: trek,gw,specialized,benoto,giant"));
+      insert(new BanderaInconsistencias("Validacion rangos valor entrada - marco - bicicleta", $var_bicicleta));
+      update($var_bicicleta);
+    
+  System.out.println("Regla: 'Validacion rangos valor entrada - marco - bicicleta'");
+end
+
+rule "Validacion rangos valor entrada - vigencia_plan - bicicleta_gold-14"
+    agenda-group "validacion"
+when
+  
+          
+    
+                      $var_bicicleta_gold: Bicicleta_gold(vigencia_plan not in ("vigencia_anual"))
+        
+    
+          
+    
+                      $var_persona: Persona(plan == $var_bicicleta_gold)
+        
+    
+          
+    
+                      $var_negocio_bicicleta_segura: Negocio_bicicleta_segura(riesgos contains $var_persona)
+        
+    
+          not(
+    
+                       BanderaInconsistencias(nombreRegla == "Validacion rangos valor entrada - vigencia_plan - bicicleta_gold", objeto == $var_bicicleta_gold)
+        
+    )
+    
+then
+  
+      $var_bicicleta_gold.getInconsistencias().add( new Inconsistencia(0,"Dato de entrada vigencia_plan debe estar dentro de los valores: vigencia_anual"));
+      insert(new BanderaInconsistencias("Validacion rangos valor entrada - vigencia_plan - bicicleta_gold", $var_bicicleta_gold));
+      update($var_bicicleta_gold);
+    
+  System.out.println("Regla: 'Validacion rangos valor entrada - vigencia_plan - bicicleta_gold-14'");
+end
+
+rule "Validacion rangos valor entrada - moneda - bicicleta_gold-15"
+    agenda-group "validacion"
+when
+  
+          
+    
+                      $var_bicicleta_gold: Bicicleta_gold(moneda not in ("cop"))
+        
+    
+          
+    
+                      $var_persona: Persona(plan == $var_bicicleta_gold)
+        
+    
+          
+    
+                      $var_negocio_bicicleta_segura: Negocio_bicicleta_segura(riesgos contains $var_persona)
+        
+    
+          not(
+    
+                       BanderaInconsistencias(nombreRegla == "Validacion rangos valor entrada - moneda - bicicleta_gold", objeto == $var_bicicleta_gold)
+        
+    )
+    
+then
+  
+      $var_bicicleta_gold.getInconsistencias().add( new Inconsistencia(0,"Dato de entrada moneda debe estar dentro de los valores: cop"));
+      insert(new BanderaInconsistencias("Validacion rangos valor entrada - moneda - bicicleta_gold", $var_bicicleta_gold));
+      update($var_bicicleta_gold);
+    
+  System.out.println("Regla: 'Validacion rangos valor entrada - moneda - bicicleta_gold-15'");
+end
+
+rule "Validacion rangos valor entrada - medio_venta - bicicleta_gold-16"
+    agenda-group "validacion"
+when
+  
+          
+    
+                      $var_bicicleta_gold: Bicicleta_gold(medio_venta not in ("mv_televentas"))
+        
+    
+          
+    
+                      $var_persona: Persona(plan == $var_bicicleta_gold)
+        
+    
+          
+    
+                      $var_negocio_bicicleta_segura: Negocio_bicicleta_segura(riesgos contains $var_persona)
+        
+    
+          not(
+    
+                       BanderaInconsistencias(nombreRegla == "Validacion rangos valor entrada - medio_venta - bicicleta_gold", objeto == $var_bicicleta_gold)
+        
+    )
+    
+then
+  
+      $var_bicicleta_gold.getInconsistencias().add( new Inconsistencia(0,"Dato de entrada medio_venta debe estar dentro de los valores: mv_televentas"));
+      insert(new BanderaInconsistencias("Validacion rangos valor entrada - medio_venta - bicicleta_gold", $var_bicicleta_gold));
+      update($var_bicicleta_gold);
+    
+  System.out.println("Regla: 'Validacion rangos valor entrada - medio_venta - bicicleta_gold-16'");
+end
+
+rule "Validacion rangos valor entrada - canal - bicicleta_gold-17"
+    agenda-group "validacion"
+when
+  
+          
+    
+                      $var_bicicleta_gold: Bicicleta_gold(canal not in ("canal_bancaseguros"))
+        
+    
+          
+    
+                      $var_persona: Persona(plan == $var_bicicleta_gold)
+        
+    
+          
+    
+                      $var_negocio_bicicleta_segura: Negocio_bicicleta_segura(riesgos contains $var_persona)
+        
+    
+          not(
+    
+                       BanderaInconsistencias(nombreRegla == "Validacion rangos valor entrada - canal - bicicleta_gold", objeto == $var_bicicleta_gold)
+        
+    )
+    
+then
+  
+      $var_bicicleta_gold.getInconsistencias().add( new Inconsistencia(0,"Dato de entrada canal debe estar dentro de los valores: canal_bancaseguros"));
+      insert(new BanderaInconsistencias("Validacion rangos valor entrada - canal - bicicleta_gold", $var_bicicleta_gold));
+      update($var_bicicleta_gold);
+    
+  System.out.println("Regla: 'Validacion rangos valor entrada - canal - bicicleta_gold-17'");
+end
+
+rule "Validacion rangos valor entrada - tipo_reserva - cob_invalidez_por_accidente"
+    agenda-group "validacion"
+when
+  
+          
+    
+                      $var_cob_invalidez_por_accidente: Cob_invalidez_por_accidente(tipo_reserva not in ("reserva_matematica","reserva_tecnica"))
+        
+    
+          
+    
+                      $var_persona: Persona(coberturas contains $var_cob_invalidez_por_accidente)
+        
+    
+          
+    
+                      $var_negocio_bicicleta_segura: Negocio_bicicleta_segura(riesgos contains $var_persona)
+        
+    
+          not(
+    
+                       BanderaInconsistencias(nombreRegla == "Validacion rangos valor entrada - tipo_reserva - cob_invalidez_por_accidente", objeto == $var_cob_invalidez_por_accidente)
+        
+    )
+    
+then
+  
+      $var_cob_invalidez_por_accidente.getInconsistencias().add( new Inconsistencia(0,"Dato de entrada tipo_reserva debe estar dentro de los valores: reserva_matematica,reserva_tecnica"));
+      insert(new BanderaInconsistencias("Validacion rangos valor entrada - tipo_reserva - cob_invalidez_por_accidente", $var_cob_invalidez_por_accidente));
+      update($var_cob_invalidez_por_accidente);
+    
+  System.out.println("Regla: 'Validacion rangos valor entrada - tipo_reserva - cob_invalidez_por_accidente'");
+end
+
+rule "Validacion rangos valor entrada - pais - ramo_vida_individual"
+    agenda-group "validacion"
+when
+  
+          
+    
+                      $var_ramo_vida_individual: Ramo_vida_individual(pais not in ("co"))
+        
+    
+          
+    
+                      $var_cob_invalidez_por_accidente: Cob_invalidez_por_accidente(ramo == $var_ramo_vida_individual)
+        
+    
+          
+    
+                      $var_persona: Persona(coberturas contains $var_cob_invalidez_por_accidente)
+        
+    
+          
+    
+                      $var_negocio_bicicleta_segura: Negocio_bicicleta_segura(riesgos contains $var_persona)
+        
+    
+          not(
+    
+                       BanderaInconsistencias(nombreRegla == "Validacion rangos valor entrada - pais - ramo_vida_individual", objeto == $var_ramo_vida_individual)
+        
+    )
+    
+then
+  
+      $var_ramo_vida_individual.getInconsistencias().add( new Inconsistencia(0,"Dato de entrada pais debe estar dentro de los valores: co"));
+      insert(new BanderaInconsistencias("Validacion rangos valor entrada - pais - ramo_vida_individual", $var_ramo_vida_individual));
+      update($var_ramo_vida_individual);
+    
+  System.out.println("Regla: 'Validacion rangos valor entrada - pais - ramo_vida_individual'");
+end
+
+rule "Validacion rangos valor entrada - impuesto - ramo_vida_individual"
+    agenda-group "validacion"
+when
+  
+          
+    
+                      $var_ramo_vida_individual: Ramo_vida_individual(impuesto not in (0))
+        
+    
+          
+    
+                      $var_cob_invalidez_por_accidente: Cob_invalidez_por_accidente(ramo == $var_ramo_vida_individual)
+        
+    
+          
+    
+                      $var_persona: Persona(coberturas contains $var_cob_invalidez_por_accidente)
+        
+    
+          
+    
+                      $var_negocio_bicicleta_segura: Negocio_bicicleta_segura(riesgos contains $var_persona)
+        
+    
+          not(
+    
+                       BanderaInconsistencias(nombreRegla == "Validacion rangos valor entrada - impuesto - ramo_vida_individual", objeto == $var_ramo_vida_individual)
+        
+    )
+    
+then
+  
+      $var_ramo_vida_individual.getInconsistencias().add( new Inconsistencia(0,"Dato de entrada impuesto debe estar dentro de los valores: 0"));
+      insert(new BanderaInconsistencias("Validacion rangos valor entrada - impuesto - ramo_vida_individual", $var_ramo_vida_individual));
+      update($var_ramo_vida_individual);
+    
+  System.out.println("Regla: 'Validacion rangos valor entrada - impuesto - ramo_vida_individual'");
+end
+
+rule "Validacion rangos valor entrada - compania - ramo_vida_individual"
+    agenda-group "validacion"
+when
+  
+          
+    
+                      $var_ramo_vida_individual: Ramo_vida_individual(compania not in ("seguros_de_vida_suramericana"))
+        
+    
+          
+    
+                      $var_cob_invalidez_por_accidente: Cob_invalidez_por_accidente(ramo == $var_ramo_vida_individual)
+        
+    
+          
+    
+                      $var_persona: Persona(coberturas contains $var_cob_invalidez_por_accidente)
+        
+    
+          
+    
+                      $var_negocio_bicicleta_segura: Negocio_bicicleta_segura(riesgos contains $var_persona)
+        
+    
+          not(
+    
+                       BanderaInconsistencias(nombreRegla == "Validacion rangos valor entrada - compania - ramo_vida_individual", objeto == $var_ramo_vida_individual)
+        
+    )
+    
+then
+  
+      $var_ramo_vida_individual.getInconsistencias().add( new Inconsistencia(0,"Dato de entrada compania debe estar dentro de los valores: seguros_de_vida_suramericana"));
+      insert(new BanderaInconsistencias("Validacion rangos valor entrada - compania - ramo_vida_individual", $var_ramo_vida_individual));
+      update($var_ramo_vida_individual);
+    
+  System.out.println("Regla: 'Validacion rangos valor entrada - compania - ramo_vida_individual'");
+end
+
+rule "Validacion rangos valor entrada - sexo - persona"
+    agenda-group "validacion"
+when
+  
+          
+    
+                      $var_persona: Persona(sexo not in ("masculino","femenino"))
+        
+    
+          
+    
+                      $var_negocio_bicicleta_segura: Negocio_bicicleta_segura(riesgos contains $var_persona)
+        
+    
+          not(
+    
+                       BanderaInconsistencias(nombreRegla == "Validacion rangos valor entrada - sexo - persona", objeto == $var_persona)
+        
+    )
+    
+then
+  
+      $var_persona.getInconsistencias().add( new Inconsistencia(0,"Dato de entrada sexo debe estar dentro de los valores: masculino,femenino"));
+      insert(new BanderaInconsistencias("Validacion rangos valor entrada - sexo - persona", $var_persona));
+      update($var_persona);
+    
+  System.out.println("Regla: 'Validacion rangos valor entrada - sexo - persona'");
+end
+
+
+

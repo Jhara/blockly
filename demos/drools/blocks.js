@@ -166,227 +166,36 @@ Blockly.Drools['rule_base'] = function(block) {
 };
 
 ////////////////////// RHS ////////////////////////////////////
-Blockly.Blocks['print_RHS'] = {
+Blockly.Blocks['inconsistency_RHS'] = {
     init: function() {
-        this.setColour(210);
+        this.setColour(15);
         this.appendDummyInput()
-            .appendField(new Blockly.FieldTextInput("print some text"), "text_RHS");
+            .appendField("Inconsistency")
+            .appendField(new Blockly.FieldTextInput("message"), "messageInconsistency_RHS");
         this.setOutput(true);
     }
 };
 
-Blockly.Drools['print_RHS'] = function(block) {
-    var text_RHS = block.getFieldValue('text_RHS');
-    var code = 'System.out.println("'+text_RHS+'"));\n'
+Blockly.Drools['inconsistency_RHS'] = function(block) {
+    var text_RHS = block.getFieldValue('messageInconsistency_RHS');
+    var code = 'insert(new Inconsistencia("'+text_RHS+'"));\n'
     return [code, Blockly.Drools.ORDER_ATOMIC];
 };
-///////////////////////////////////////
 
-
-///////////// Facts //////////////
-
-Blockly.Blocks['fact_persona'] = {
-  name: 'Persona',
-  init: function() {
-    this.appendValueInput("FACT_NAME")
-        .setCheck(["persona.this", "Boolean"])
-        .appendField(new Blockly.FieldTextInput(""), "FACT_VAR")
-        .appendField("Persona");
-    this.setPreviousStatement(true);
-    this.setNextStatement(true);
-    this.setColour(240);
-  }
-};
-
-Blockly.Drools['fact_persona'] = function(block) {
-  var text_fact_var = block.getFieldValue('FACT_VAR');
-  var value_fact_name = Blockly.Drools.valueToCode(block, 'FACT_NAME', Blockly.Drools.ORDER_NONE)||'';
-  var code = (text_fact_var != ''?text_fact_var+': ':'')+block.name+' ('+value_fact_name+')\n';
-  return code;
-};
-
-Blockly.Blocks['att_persona_this'] = {
-  name: 'this',
-  init: function() {
-    this.appendDummyInput()
-        .setAlign(Blockly.ALIGN_CENTRE)
-        .appendField(new Blockly.FieldTextInput(""), "FIELD_VAR")
-        .appendField("this");
-    this.setInputsInline(true);
-    this.setOutput(true, "persona.this");
-    this.setColour(270);
-  }
-};
-
-Blockly.Drools['att_persona_this'] = function(block) {
-  var text_field_var = block.getFieldValue('FIELD_VAR') || '';
-  var code = (text_field_var !== ''?text_field_var+': ':'')+block.name;
-  return [code, Blockly.Drools.ORDER_ATOMIC];
-};
-
-Blockly.Blocks['att_persona_edad'] = {
-  name: 'edad',
-  init: function() {
-    this.appendDummyInput()
-        .setAlign(Blockly.ALIGN_CENTRE)
-        .appendField(new Blockly.FieldTextInput(""), "FIELD_VAR")
-        .appendField("edad");
-    this.setInputsInline(true);
-    this.setOutput(true, "persona.edad");
-    this.setColour(270);
-  }
-};
-
-Blockly.Drools['att_persona_edad'] = function(block) {
-  var text_field_var = block.getFieldValue('FIELD_VAR') || '';
-  var code = (text_field_var !== ''?text_field_var+': ':'')+block.name;
-  return [code, Blockly.Drools.ORDER_ATOMIC];
-};
-
-Blockly.Blocks['att_persona_sexo'] = {
-  name: 'sexo',
-  init: function() {
-    this.appendDummyInput()
-        .setAlign(Blockly.ALIGN_CENTRE)
-        .appendField(new Blockly.FieldTextInput(""), "FIELD_VAR")
-        .appendField("sexo");
-    this.setInputsInline(true);
-    this.setOutput(true, "persona.sexo");
-    this.setColour(270);
-  }
-};
-
-
-Blockly.Drools['att_persona_sexo'] = function(block) {
-  var text_field_var = block.getFieldValue('FIELD_VAR') || '';
-  var code = (text_field_var !== ''?text_field_var+': ':'')+block.name;
-  return [code, Blockly.Drools.ORDER_ATOMIC];
-};
-
-
-Blockly.Blocks['fact_direccion'] = {
-  name: 'Direccion',
-  init: function() {
-    this.appendValueInput("FACT_NAME")
-        .setCheck(['direccion.this', 'direccion.calle', "Boolean"])
-        .appendField(new Blockly.FieldTextInput(""), "FACT_VAR")
-        .appendField("Direccion");
-    this.setPreviousStatement(true);
-    this.setNextStatement(true);
-    this.setColour(240);
-  }
-};
-
-Blockly.Drools['fact_direccion'] = function(block) {
-  var text_fact_var = block.getFieldValue('FACT_VAR');
-  var value_fact_name = Blockly.Drools.valueToCode(block, 'FACT_NAME', Blockly.Drools.ORDER_NONE)||'';
-  var code = (text_fact_var != ''?text_fact_var+': ':'')+block.name+' ('+value_fact_name+')\n';
-  return code;
-};
-
-Blockly.Blocks['att_direccion_this'] = {
-  name: 'this',
-  init: function() {
-    this.appendDummyInput()
-        .setAlign(Blockly.ALIGN_CENTRE)
-        .appendField(new Blockly.FieldTextInput(""), "FIELD_VAR")
-        .appendField("this");
-    this.setInputsInline(true);
-    this.setOutput(true, "direccion.this");
-    this.setColour(270);
-  }
-};
-
-Blockly.Drools['att_direccion_this'] = function(block) {
-  var text_field_var = block.getFieldValue('FIELD_VAR') || '';
-  var code = (text_field_var !== ''?text_field_var+': ':'')+block.name;
-  return [code, Blockly.Drools.ORDER_ATOMIC];
-};
-
-Blockly.Blocks['att_direccion_calle'] = {
-  name: 'calle',
-  init: function() {
-    this.appendDummyInput()
-        .setAlign(Blockly.ALIGN_CENTRE)
-        .appendField(new Blockly.FieldTextInput(""), "FIELD_VAR")
-        .appendField("calle");
-    this.setInputsInline(true);
-    this.setOutput(true, ["direccion.calle", "String"]);
-    this.setColour(270);
-  }
-};
-
-Blockly.Drools['att_direccion_calle'] = function(block) {
-  var text_field_var = block.getFieldValue('FIELD_VAR') || '';
-  var code = (text_field_var !== ''?text_field_var+': ':'')+block.name;
-  return [code, Blockly.Drools.ORDER_ATOMIC];
-};
-
-
-/////////////////////////////////
-
-////////////////////// COMPARE ////////////////////////////////////
-
-
-Blockly.Blocks['compare_sura'] = {
-    category: 'logic_connect',
+Blockly.Blocks['warning_RHS'] = {
     init: function() {
-        var OPERATORS = Blockly.LTR ? [
-            ['=', '=='],
-            ['\u2260', '!='],
-            ['>', '>'],
-            ['\u2265', '>='],
-            ['<', '<'],
-            ['\u2264', '<=']
-        ] : [
-            ['=', '=='],
-            ['\u2260', '!='],
-            ['<', '<'],
-            ['\u2264', '<='],
-            ['>', '>'],
-            ['\u2265', '>=']
-        ];
-        this.setColour(140);
-        this.appendStatementInput("atributo1")
-            .setCheck(['bloque_raiz', 'accumulate', 'cumulo', 'atributo', 'length', 'var_rule']);
+        this.setColour(60);
         this.appendDummyInput()
-            .appendField(new Blockly.FieldDropdown(OPERATORS), "OP");
-        this.appendStatementInput("atributo2")
-            .setCheck(['logic_boolean_politica','text_politica','null', 'math_number_politica', 'var_rule']);
-        //this.setInputsInline(true);
-        this.setPreviousStatement(true);
-        this.setNextStatement(true);
-        //this.setPreviousStatement('logic_connect');
-        this.setTooltip('');
+            .appendField("Warning")
+            .appendField(new Blockly.FieldTextInput("message"), "messageWarning_RHS");
+        this.setOutput(true);
     }
 };
 
-
-
-
-Blockly.Drools['compare_sura'] = function(block) {
-    var dropdown_op = block.getFieldValue('OP');
-    var atributo1 = '';
-    var atributo2 = '';
-    var code = '';
-    try {
-        atributo1 = Blockly.Drools.statementToCode(block, 'atributo1');
-    }catch(err) {
-        atributo1 = Blockly.Drools.valueToCode(block, 'atributo1', Blockly.Drools.ORDER_NONE);
-    }
-
-    try {
-        atributo2 = Blockly.Drools.statementToCode(block, 'atributo2');
-    }catch(err) {
-        atributo2 = Blockly.Drools.valueToCode(block, 'atributo2', Blockly.Drools.ORDER_NONE);
-    }
-
-    code = atributo1.trim()+''+dropdown_op.trim()+''+atributo2.trim();
-    if(block.nextConnection.targetConnection !== null){
-      code += ',';
-    }
-    //var code = '"condicion" : {'+atributo1 + ', "con": "' +dropdown_op+'", '+atributo2+'} ';
-    return code;
+Blockly.Drools['warning_RHS'] = function(block) {
+    var text_RHS = block.getFieldValue('messageWarning_RHS');
+    var code = 'insert(new Advertencia("'+text_RHS+'"));\n'
+    return [code, Blockly.Drools.ORDER_ATOMIC];
 };
 
 Blockly.Blocks['var_rule'] = {
@@ -404,21 +213,66 @@ Blockly.Drools['var_rule'] = function(block) {
     return code.trim();
 };
 
+Blockly.Blocks['logic_operation_drools_constraints'] = {
+  /**
+   * Block for logical operations: 'and', 'or'.
+   * @this Blockly.Block
+   */
+  init: function() {
+    var OPERATORS =
+        [[Blockly.Msg.LOGIC_OPERATION_AND, 'AND'],
+         [Blockly.Msg.LOGIC_OPERATION_OR, 'OR']];
+    this.setHelpUrl(Blockly.Msg.LOGIC_OPERATION_HELPURL);
+    this.setColour(330);
+    this.setOutput(true, 'Boolean');
+    this.appendValueInput('A')
+        .setCheck('Boolean');
+    this.appendValueInput('B')
+        .setCheck('Boolean')
+        .appendField(new Blockly.FieldDropdown(OPERATORS), 'OP');
+    this.setInputsInline(true);
+    // Assign 'this' to a variable for use in the tooltip closure below.
+    var thisBlock = this;
+    this.setTooltip(function() {
+      var op = thisBlock.getFieldValue('OP');
+      var TOOLTIPS = {
+        'AND': Blockly.Msg.LOGIC_OPERATION_TOOLTIP_AND,
+        'OR': Blockly.Msg.LOGIC_OPERATION_TOOLTIP_OR
+      };
+      return TOOLTIPS[op];
+    });
+  }
+};
+
+Blockly.Blocks['logic_operation_drools_facts'] = {
+    category: 'logic_connect',
+    init: function() {
+      var OPERATORS =
+          [[Blockly.Msg.LOGIC_OPERATION_AND, 'AND'],
+           [Blockly.Msg.LOGIC_OPERATION_OR, 'OR']];
+        this.setColour(330);
+        this.appendStatementInput("A")
+            .appendField("")
+            .setCheck(null);
+        this.appendDummyInput()
+            .appendField(new Blockly.FieldDropdown(OPERATORS), "OP");
+        this.appendStatementInput("B")
+            .appendField("")
+            .setCheck(null);
+        this.setPreviousStatement(true, ['logic_operation_drools_facts', 'rule_base']);
+        this.setTooltip('');
+    }
+};
+
 Blockly.Drools['logic_operation_drools_facts'] = function(block) {
     var operator = (block.getFieldValue('OP') == 'AND') ? 'and' : 'or';
     var statements_atributo = Blockly.Drools.statementToCode(block, 'A');
     var statements_condicion = Blockly.Drools.statementToCode(block, 'B');
-
     var code = '(' +statements_atributo+' '+operator+' '+statements_condicion+ ')\n';
-
     return code;
 };
 
-
 ////////////////////// UTILITARIOS ////////////////////////////////////
-
-
-
 Blockly.Blocks['math_number_politica'] = {
     /**
      * Block for numeric value.
@@ -719,60 +573,4 @@ Blockly.Drools['length'] = function(block) {
     var length = obj.atributo.nombre + '.length';
     obj.nombre = length;
     return '"atributo": {"nombre" : "'+obj.nombre+'"}'.trim();
-};
-
-////////////////////////////////////// null /////////////
-
-Blockly.Blocks['null'] = {
-    init: function() {
-        this.setHelpUrl(Blockly.Msg.MATH_NUMBER_HELPURL);
-        this.setColour(230);
-        this.appendDummyInput()
-            .appendField("null");
-        this.setPreviousStatement(true, ['Number', 'null']);
-        this.setTooltip(Blockly.Msg.MATH_NUMBER_TOOLTIP);
-    }
-};
-
-
-Blockly.Drools['null'] = function(block) {
-    // Numeric value.
-    //var code = parseFloat(block.getFieldValue('NUM'));
-    return [null, Blockly.Drools.ORDER_NONE];
-};
-
-/////////////////////////////////////text/////////////////
-Blockly.Blocks['text_politica'] = {
-    init: function() {
-        this.setColour(210);
-        this.appendDummyInput()
-            .appendField(new Blockly.FieldImage("../../media/quote0.png", 12, 12, ""))
-            .appendField(new Blockly.FieldTextInput(""), "TEXT")
-            .appendField(new Blockly.FieldImage("../../media/quote1.png", 12, 12, ""));
-        this.setPreviousStatement(true, 'text_politica');
-        this.setTooltip('');
-    }
-};
-
-Blockly.Drools['text_politica'] = function(block) {
-    var code = block.getFieldValue('TEXT');
-    return '"'+code.trim()+'"';
-};
-
-/////////////////////////////boolean/////////////////////
-Blockly.Blocks['logic_boolean_politica'] = {
-    init: function() {
-        this.setColour(210);
-        this.appendDummyInput()
-            .appendField(new Blockly.FieldDropdown([["true", "TRUE"], ["false", "FALSE"]]),"BOOL");
-        this.setPreviousStatement(true,'logic_boolean_politica');
-        this.setTooltip('');
-    }
-};
-
-
-
-Blockly.Drools['logic_boolean_politica'] = function(block) {
-    var code = (block.getFieldValue('BOOL') == 'TRUE') ? 'true' : 'false';
-    return code;
 };

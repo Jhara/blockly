@@ -679,3 +679,17 @@ Blockly.Blocks['lists_split'] = {
     });
   }
 };
+
+Blockly.Blocks['list_contains'] = {
+  init: function() {
+    this.setHelpUrl(Blockly.Msg.LOGIC_OPERATION_HELPURL);
+    this.setColour(330);
+    this.setOutput(true, 'Boolean');
+    this.appendValueInput('A')
+        .setCheck(['List']);
+    this.appendValueInput('B')
+        .setCheck(null)
+        .appendField('contains');
+    this.setInputsInline(true);
+  }
+};

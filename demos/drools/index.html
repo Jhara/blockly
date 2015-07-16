@@ -10,8 +10,10 @@
   <script src="../../generators/drools/logic.js"></script>
   <script src="../../generators/drools/math.js"></script>
   <script src="../../generators/drools/text.js"></script>
+  <script src="../../generators/drools/lists.js"></script>
   <script src="../../msg/js/en.js"></script>
   <script src="blocks.js"></script>
+  <script src="dominio.js"></script>
   <style>
     html, body {
       height: 100%;
@@ -67,24 +69,35 @@
     <category name="Drools">
       <category name="Rule Base">
         <block type="rule_base"></block>
-        <block type="print_RHS"></block>
+        <block type="var_rule"></block>
+        <block type="inconsistency_RHS"></block>
+        <block type="warning_RHS"></block>
       </category>
       <category name="Logic">
         <block type="logic_operation_drools_constraints"></block>
         <block type="logic_operation_drools_facts"></block>
       </category>
-      <category name="Objects">
-        <category name="Persona">
-          <block type="fact_persona"></block>
-          <block type="att_persona_this"></block>
-          <block type="att_persona_edad"></block>
-          <block type="att_persona_sexo"></block>
+    </category>
+    <category name="Domain">
+      <category name="Negocio">
+        <block type="fact_negocio"></block>
+        <category name="riesgos">
+          <block type="att_negocio_riesgos"></block>
+          <category name="Persona">
+            <block type="fact_persona"></block>
+            <block type="att_persona_this"></block>
+            <block type="att_persona_edad"></block>
+            <block type="att_persona_sexo"></block>
+            <block type="att_persona_fumador"></block>
+          </category>
+          <category name="Bicicleta">
+          </category>
         </category>
-        <category name="Direccion">
-          <block type="fact_direccion"></block>
-          <block type="att_direccion_this"></block>
-          <block type="att_direccion_calle"></block>
-        </category>
+      </category>
+      <category name="Direccion">
+        <block type="fact_direccion"></block>
+        <block type="att_direccion_this"></block>
+        <block type="att_direccion_calle"></block>
       </category>
     </category>
 
@@ -92,6 +105,8 @@
       <category name="Logic">
         <block type="logic_compare"></block>
         <block type="logic_operation"></block>
+        <block type="logic_boolean"></block>
+        <block type="logic_null"></block>
       </category>
       <category name="Math">
         <block type="math_number"></block>
@@ -99,6 +114,10 @@
       <category name="Text">
         <block type="text"></block>
       </category>
+      <category name="List">
+        <block type="list_contains"></block>
+      </category>
+
     </category>
 
   </xml>

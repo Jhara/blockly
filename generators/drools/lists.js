@@ -322,3 +322,10 @@ Blockly.Drools['lists_split'] = function(block) {
   var code = value_input + '.' + functionName + '(' + value_delim + ')';
   return [code, Blockly.Drools.ORDER_FUNCTION_CALL];
 };
+
+Blockly.Drools['list_contains'] = function(block) {
+    var argument0 = Blockly.Drools.valueToCode(block, 'A', Blockly.Drools.ORDER_ATOMIC);
+    var argument1 = Blockly.Drools.valueToCode(block, 'B', Blockly.Drools.ORDER_ATOMIC);
+    var code = argument0+' contains '+argument1;
+    return [code, Blockly.Drools.ORDER_ATOMIC];
+};
