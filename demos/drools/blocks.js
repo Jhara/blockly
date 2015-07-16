@@ -189,6 +189,7 @@ Blockly.Blocks['fact_persona'] = {
   name: 'Persona',
   init: function() {
     this.appendValueInput("FACT_NAME")
+        .setCheck(["persona.this", "Boolean"])
         .appendField(new Blockly.FieldTextInput(""), "FACT_VAR")
         .appendField("Persona");
     this.setPreviousStatement(true);
@@ -212,7 +213,7 @@ Blockly.Blocks['att_persona_this'] = {
         .appendField(new Blockly.FieldTextInput(""), "FIELD_VAR")
         .appendField("this");
     this.setInputsInline(true);
-    this.setOutput(true);
+    this.setOutput(true, "persona.this");
     this.setColour(270);
   }
 };
@@ -231,7 +232,7 @@ Blockly.Blocks['att_persona_edad'] = {
         .appendField(new Blockly.FieldTextInput(""), "FIELD_VAR")
         .appendField("edad");
     this.setInputsInline(true);
-    this.setOutput(true);
+    this.setOutput(true, "persona.edad");
     this.setColour(270);
   }
 };
@@ -250,7 +251,7 @@ Blockly.Blocks['att_persona_sexo'] = {
         .appendField(new Blockly.FieldTextInput(""), "FIELD_VAR")
         .appendField("sexo");
     this.setInputsInline(true);
-    this.setOutput(true);
+    this.setOutput(true, "persona.sexo");
     this.setColour(270);
   }
 };
@@ -267,7 +268,7 @@ Blockly.Blocks['fact_direccion'] = {
   name: 'Direccion',
   init: function() {
     this.appendValueInput("FACT_NAME")
-        .setCheck(['direccion.this', 'direccion.calle'])
+        .setCheck(['direccion.this', 'direccion.calle', "Boolean"])
         .appendField(new Blockly.FieldTextInput(""), "FACT_VAR")
         .appendField("Direccion");
     this.setPreviousStatement(true);
@@ -291,7 +292,7 @@ Blockly.Blocks['att_direccion_this'] = {
         .appendField(new Blockly.FieldTextInput(""), "FIELD_VAR")
         .appendField("this");
     this.setInputsInline(true);
-    this.setOutput(true);
+    this.setOutput(true, "direccion.this");
     this.setColour(270);
   }
 };
@@ -310,7 +311,7 @@ Blockly.Blocks['att_direccion_calle'] = {
         .appendField(new Blockly.FieldTextInput(""), "FIELD_VAR")
         .appendField("calle");
     this.setInputsInline(true);
-    this.setOutput(true);
+    this.setOutput(true, ["direccion.calle", "String"]);
     this.setColour(270);
   }
 };
