@@ -170,15 +170,21 @@ Blockly.Blocks['inconsistency_RHS'] = {
     init: function() {
         this.setColour(15);
         this.appendDummyInput()
+            .appendField(new Blockly.FieldTextInput("var"), "VAR_TEXT")
             .appendField("Inconsistency")
-            .appendField(new Blockly.FieldTextInput("message"), "messageInconsistency_RHS");
+            .appendField(new Blockly.FieldTextInput("message"), "MSG_TEXT");
         this.setOutput(true);
     }
 };
 
 Blockly.Drools['inconsistency_RHS'] = function(block) {
-    var text_RHS = block.getFieldValue('messageInconsistency_RHS');
-    var code = 'insert(new Inconsistencia("'+text_RHS+'"));\n'
+    var var_txt = block.getFieldValue('VAR_TEXT');
+    var text_RHS = block.getFieldValue('MSG_TEXT');
+    var code = var_txt;
+    code += '.getInconsistencias().add(';
+    code += 'new Inconsistencia("'+text_RHS+'")';
+    code += ');';
+    code += '\n';
     return [code, Blockly.Drools.ORDER_ATOMIC];
 };
 
@@ -186,31 +192,40 @@ Blockly.Blocks['warning_RHS'] = {
     init: function() {
         this.setColour(60);
         this.appendDummyInput()
+            .appendField(new Blockly.FieldTextInput("var"), "VAR_TEXT")
             .appendField("Warning")
-            .appendField(new Blockly.FieldTextInput("message"), "messageWarning_RHS");
+            .appendField(new Blockly.FieldTextInput("message"), "MSG_TEXT");
         this.setOutput(true);
     }
 };
 
 Blockly.Drools['warning_RHS'] = function(block) {
-    var text_RHS = block.getFieldValue('messageWarning_RHS');
-    var code = 'insert(new Advertencia("'+text_RHS+'"));\n'
+    var var_txt = block.getFieldValue('VAR_TEXT');
+    var text_RHS = block.getFieldValue('MSG_TEXT');
+    var code = var_txt;
+    code += '.getAdvertencias().add(';
+    code += 'new Advertencia("'+text_RHS+'")';
+    code += ');';
+    code += '\n';
     return [code, Blockly.Drools.ORDER_ATOMIC];
 };
 
 Blockly.Blocks['var_rule'] = {
-    init: function() {
-        this.setColour(210);
-        this.appendDummyInput()
-            .appendField(new Blockly.FieldTextInput(""), "VAR_TEXT")
-        this.setPreviousStatement(true);
-        this.setTooltip('');
-    }
+  init: function() {
+    this.appendDummyInput()
+        .appendField("var")
+        .appendField(new Blockly.FieldTextInput(""), "VAR_TEXT");
+    this.setOutput(true);
+    this.setColour(210);
+    this.setTooltip('');
+    this.setHelpUrl('http://www.example.com/');
+  }
 };
 
 Blockly.Drools['var_rule'] = function(block) {
-    var code = block.getFieldValue('VAR_TEXT');
-    return code.trim();
+  var text_var_text = block.getFieldValue('VAR_TEXT');
+  var code = text_var_text.trim();
+  return [code, Blockly.Drools.ORDER_ATOMIC];
 };
 
 Blockly.Blocks['logic_operation_drools_constraints'] = {
