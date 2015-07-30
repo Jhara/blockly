@@ -405,6 +405,50 @@ Blockly.Drools['politicas_rc'] = function(block) {
 ////////////////////// ACUMULATE ////////////////////////////////////
 
 Blockly.Blocks['accumulate'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField(new Blockly.FieldDropdown([["sumar", "sumar"]]), "drop_func_acc");
+    this.appendStatementInput("facts");
+    this.appendValueInput("A");
+    this.appendValueInput("B")
+        .appendField(new Blockly.FieldDropdown([["!=", "!="], ["==", "=="]]), "drop_compare");
+    this.setInputsInline(true);
+    this.setPreviousStatement(true);
+    this.setColour(330);
+    this.setTooltip('');
+    this.setHelpUrl('http://www.example.com/');
+  }
+};
+
+Blockly.Drools['accumulate'] = function(block) {
+  var dropdown_drop_func_acc = block.getFieldValue('drop_func_acc');
+  var statements_atributo = Blockly.Drools.statementToCode(block, 'facts');
+  var factsAccumulate = codeFactsAccumulate(block, 'facts');
+  var value_a = Blockly.Drools.valueToCode(block, 'A', Blockly.Drools.ORDER_NONE);
+  var dropdown_drop_compare = block.getFieldValue('drop_compare');
+  var value_b = Blockly.Drools.valueToCode(block, 'B', Blockly.Drools.ORDER_NONE);
+  var code = '';
+  code += 'accumulate('+factsAccumulate+', $suma: sum('+value_a+'); $suma '+dropdown_drop_compare+''+value_b+')\n';
+  return code;
+};
+
+function codeFactsAccumulate(block, name){
+  var targetBlock = block.getInputTargetBlock(name);
+  var blocks = targetBlock.getDescendants();
+  var codigoFacts = [];
+  console.log('---> '+blocks.length);
+  for (var b = 0; b < blocks.length; b++) {
+    var block = blocks[b];
+    console.log(block);
+    if(block.codigo){
+      codigoFacts.push(block.codigo);
+    }
+  }
+  var code = codigoFacts.join(" and ");
+  return code;
+}
+
+/*Blockly.Blocks['accumulate'] = {
     category: 'Accumulate',
     init: function() {
         this.setColour(65);
@@ -426,7 +470,7 @@ Blockly.Blocks['accumulate'] = {
         if(option){
             this.appendStatementInput("condicion")
                 .appendField("Condición")
-                .setCheck(['logic_connect']);
+                .setCheck(null);
         }else{
             if(this.getInput('condicion') != null) {
                 this.removeInput('condicion');
@@ -450,11 +494,22 @@ Blockly.Blocks['accumulate'] = {
 Blockly.Drools['accumulate'] = function(block) {
     var dropdown_op = block.getFieldValue('OP');
     var statements_atributo = Blockly.Drools.statementToCode(block, 'atributo');
+    var targetBlock = block.getInputTargetBlock('atributo');
+    var blocks = targetBlock.getDescendants();
+    var codigoFacts = [];
+    for (var b = 0; b < blocks.length; b++) {
+      var block = blocks[b];
+      if(block.codigo){
+        codigoFacts.push(block.codigo);
+      }
+    }
+
+    console.log(codigoFacts.join(" and "));
     var statements_condicion = Blockly.Drools.statementToCode(block, 'condicion');
     var condicionFinal = (statements_condicion == "") ? "" :  '"condicion_acc" : {'+ statements_condicion +'},';
     var code = '{"accumulate": { "operador": "' +dropdown_op+'", '+ condicionFinal+' "atributoAcc" : {'+  statements_atributo + '}}}';
     return code;
-};
+};*/
 
 
 

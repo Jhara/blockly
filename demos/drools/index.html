@@ -4,6 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="target-densitydpi=device-dpi, height=660, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>Blockly : Block Drools Generator</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.3/angular.min.js"></script>
   <script src="../../blockly_compressed.js"></script>
   <script src="../../blocks_compressed.js"></script>
   <script src="../../generators/drools.js"></script>
@@ -14,6 +15,8 @@
   <script src="../../msg/js/en.js"></script>
   <script src="blocks.js"></script>
   <script src="dominio.js"></script>
+  <script src="dominioGenerado.js"></script>
+  <script src="data.json"></script>
   <style>
     html, body {
       height: 100%;
@@ -72,34 +75,12 @@
         <block type="var_rule"></block>
         <block type="inconsistency_RHS"></block>
         <block type="warning_RHS"></block>
+        <block type="accumulate"></block>
       </category>
 
       <category name="Logic">
         <block type="logic_operation_drools_constraints"></block>
         <block type="logic_operation_drools_facts"></block>
-      </category>
-    </category>
-<sep>  </sep>
-    <category name="Domain">
-      <category name="Negocio">
-        <block type="fact_negocio"></block>
-        <category name="riesgos">
-          <block type="att_negocio_riesgos"></block>
-          <category name="Persona">
-            <block type="fact_persona"></block>
-            <block type="att_persona_this"></block>
-            <block type="att_persona_edad"></block>
-            <block type="att_persona_sexo"></block>
-            <block type="att_persona_fumador"></block>
-          </category>
-          <category name="Bicicleta">
-          </category>
-        </category>
-      </category>
-      <category name="Direccion">
-        <block type="fact_direccion"></block>
-        <block type="att_direccion_this"></block>
-        <block type="att_direccion_calle"></block>
       </category>
     </category>
 
@@ -120,18 +101,177 @@
       </category>
 
     </category>
+<sep>  </sep>
+    <category name="Domain">
+      <category name="Negocio">
+        <block type="fact_negocio"></block>
+        <category name="riesgos">
+          <block type="att_negocio_riesgos"></block>
+          <category name="Persona">
+            <block type="fact_persona"></block>
+            <block type="att_persona_this"></block>
+            <block type="att_persona_edad"></block>
+            <block type="att_persona_sexo"></block>
+            <block type="att_persona_fumador"></block>
+          </category>
+          <category name="Bicicleta">
+            <block type="fact_bicicleta"></block>
+            <block type="att_bicicleta_beneficiarios"></block>
+          </category>
+        </category>
+      </category>
+
+      <category name="Beneficiario">
+        <block type="fact_beneficiarios_riesgos_negocio_bicicleta"></block>
+        <block type="att_beneficiarios_porcentaje_beneficiario"></block>
+      </category>
+
+      <category name="Direccion">
+        <block type="fact_direccion"></block>
+        <block type="att_direccion_this"></block>
+        <block type="att_direccion_calle"></block>
+      </category>
+    </category>
+
+
 
   </xml>
 
   <script>
+    function mainCategories(){
+      var categories = '';
+      categories += '<category name="Drools">';
+      categories += '<category name="Rule Base">';
+      categories += '<block type="rule_base"></block>';
+      categories += '<block type="var_rule"></block>';
+      categories += '<block type="inconsistency_RHS"></block>';
+      categories += '<block type="warning_RHS"></block>';
+      categories += '<block type="accumulate"></block>';
+      categories += '</category>';
+      categories += '<category name="Logic">';
+      categories += '<block type="logic_operation_drools_constraints"></block>';
+      categories += '<block type="logic_operation_drools_facts"></block>';
+      categories += '</category>';
+      categories += '</category>';
+      categories += '<category name="Expresion">';
+      categories += '<category name="Logic">';
+      categories += '<block type="logic_compare"></block>';
+      categories += '<block type="logic_boolean"></block>';
+      categories += '<block type="logic_null"></block>';
+      categories += '</category>';
+      categories += '<category name="Math">';
+      categories += '<block type="math_number"></block>';
+      categories += '</category>';
+      categories += '<category name="Text">';
+      categories += '<block type="text"></block>';
+      categories += '</category>';
+      categories += '<category name="List">';
+      categories += '<block type="list_contains"></block>';
+      categories += '</category>';
+      categories += '</category>';
+
+      return categories;
+    }
+
+    function toolBoxGenerator(){
+        var toolbox = '<xml>';
+        toolbox += mainCategories();
+        toolbox += '<sep></sep>';
+        toolbox += completarPaletaProductoConPlan(JSON.parse(data));
+        toolbox += '</xml>';
+        return toolbox;
+    }
+
+    var toolbox = toolBoxGenerator(); //document.getElementById('toolbox')
+
     var workspace = Blockly.inject('blocklyDiv',
-         {toolbox: document.getElementById('toolbox')});
+         {toolbox: toolbox});
     Blockly.Xml.domToWorkspace(workspace);
 
     function showCode() {
+      var mydata = JSON.parse(data);
       var code = Blockly.Drools.workspaceToCode(workspace);
-      alert(code);
+      console.log('code '+code);
     }
+
+    function completarPaletaProductoConPlan(data) {
+
+      var categories = '';
+      var id = data.detalle.concepto.id;
+      categories += '<category name="' + id + '">';
+      categories += '<block type="concepto_' + id + '"></block>';
+      Conceptos.addValor(id);
+      categories = construirCategoriasRecursiva(data.detalle, categories);
+      categories += '</category>';
+      return categories;
+    }
+
+    function generarAtributo(atributo){
+      var categories = '';
+      var nombreRelacion = atributo.concepto.nombreRelacion;
+      var esLista = atributo.concepto.esLista;
+      var id = atributo.concepto.id;
+      if(nombreRelacion === 'ramo'){
+        categories += Atributos.crearBloque(nombreRelacion, esLista);
+      }else{
+        categories += Atributos.crearBloque(id, esLista);
+      }
+
+      return categories;
+
+    }
+
+    function construirCategoriasRecursiva(data, categories) {
+      console.log('padre '+data.concepto.id);
+      angular.forEach(data.atributos, function (atributo) {
+
+        //Atributos simples
+        var tipo = atributo.concepto.tipo;
+        var clase = atributo.concepto.clase;
+        console.log('atributo '+atributo.concepto.id);
+        categories += generarAtributo(atributo);
+
+        if(clase === 'ejecucion' ){
+          var categoriaComplejo = '';
+          categoriaComplejo += '<category name="' + atributo.concepto.nombreRelacion + '">';
+          angular.forEach(atributo.atributos, function(att){
+            categoriaComplejo += '<category name="' + att.concepto.id + '">';
+            categoriaComplejo += '<block type="concepto_' +  att.concepto.id + '"></block>';
+            Conceptos.addValor(att.concepto.id);
+            categoriaComplejo += construirCategoriasRecursiva(att, '');
+            categoriaComplejo += '</category>';
+          });
+          categoriaComplejo += '</category>';
+          categories += categoriaComplejo;
+        }else if(tipo === 'complejo'){
+          var conceptoComplejo = atributo.concepto;
+          var atributosDelComplejo = atributo.atributos;
+          var categoriaComplejo = '';
+          categoriaComplejo += '<category name="' + conceptoComplejo.nombreRelacion + '">';
+          categoriaComplejo += '<block type="concepto_' + conceptoComplejo.id + '"></block>';
+          Conceptos.addValor(conceptoComplejo.id);
+
+          angular.forEach(atributosDelComplejo, function(att){
+            var tipoInner = att.concepto.tipo;
+            if(tipoInner === 'complejo'){
+              console.log('padre '+att.concepto.id);
+              categoriaComplejo += '<category name="' + att.concepto.id + '">';
+              categoriaComplejo += '<block type="concepto_' + att.concepto.id + '"></block>';
+              Conceptos.addValor(att.concepto.id);
+              categoriaComplejo += '</category>';
+            }
+            console.log('atributo '+att.concepto.id);
+            categoriaComplejo += generarAtributo(att);
+          });
+          categoriaComplejo += '</category>'
+          categories += categoriaComplejo;
+        }
+
+      });
+
+      return categories;
+    }
+
   </script>
 
 </body>

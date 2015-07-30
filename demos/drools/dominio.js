@@ -1,11 +1,11 @@
 'use strict';
 
 Blockly.Blocks['fact_negocio'] = {
-  name: 'Negocio',
+  name: 'Negocio_bicicleta',
   init: function() {
     this.appendValueInput("FACT_NAME")
         .appendField(new Blockly.FieldTextInput(""), "FACT_VAR")
-        .appendField("Negocio");
+        .appendField("Negocio_bicicleta");
     this.setPreviousStatement(true);
     this.setNextStatement(true);
     this.setColour(240);
@@ -35,6 +35,7 @@ Blockly.Drools['fact_negocio'] = function(block) {
   var text_fact_var = block.getFieldValue('FACT_VAR');
   var value_fact_name = Blockly.Drools.valueToCode(block, 'FACT_NAME', Blockly.Drools.ORDER_NONE)||'';
   var code = (text_fact_var != ''?text_fact_var+': ':'')+block.name+' ('+value_fact_name+')\n';
+  block.codigo = code;
   return code;
 };
 
@@ -56,6 +57,7 @@ Blockly.Drools['fact_persona'] = function(block) {
   var text_fact_var = block.getFieldValue('FACT_VAR');
   var value_fact_name = Blockly.Drools.valueToCode(block, 'FACT_NAME', Blockly.Drools.ORDER_NONE)||'';
   var code = (text_fact_var != ''?text_fact_var+': ':'')+block.name+' ('+value_fact_name+')\n';
+  block.codigo = code;
   return code;
 };
 
@@ -137,6 +139,89 @@ Blockly.Drools['att_persona_fumador'] = function(block) {
   return [code, Blockly.Drools.ORDER_ATOMIC];
 };
 
+Blockly.Blocks['fact_bicicleta'] = {
+  name: 'Bicicleta',
+  init: function() {
+    this.appendValueInput("FACT_NAME")
+        .setCheck(null)
+        .appendField(new Blockly.FieldTextInput(""), "FACT_VAR")
+        .appendField("Bicicleta");
+    this.setPreviousStatement(true);
+    this.setNextStatement(true);
+    this.setColour(240);
+  }
+};
+
+Blockly.Drools['fact_bicicleta'] = function(block) {
+  var text_fact_var = block.getFieldValue('FACT_VAR');
+  var value_fact_name = Blockly.Drools.valueToCode(block, 'FACT_NAME', Blockly.Drools.ORDER_NONE)||'';
+  var code = (text_fact_var != ''?text_fact_var+': ':'')+block.name+' ('+value_fact_name+')\n';
+  block.codigo = code;
+  return code;
+};
+
+Blockly.Blocks['att_bicicleta_beneficiarios'] = {
+  name: 'beneficiarios',
+  init: function() {
+    this.appendDummyInput()
+        .setAlign(Blockly.ALIGN_CENTRE)
+        .appendField(new Blockly.FieldTextInput(""), "FIELD_VAR")
+        .appendField("beneficiarios");
+    this.setInputsInline(true);
+    this.setOutput(true);
+    this.setColour(270);
+  }
+};
+
+
+Blockly.Drools['att_bicicleta_beneficiarios'] = function(block) {
+  var text_field_var = block.getFieldValue('FIELD_VAR') || '';
+  var code = (text_field_var !== ''?text_field_var+': ':'')+block.name;
+  return [code, Blockly.Drools.ORDER_ATOMIC];
+};
+
+Blockly.Blocks['fact_beneficiarios_riesgos_negocio_bicicleta'] = {
+  name: 'Beneficiarios_riesgos_negocio_bicicleta',
+  init: function() {
+    this.appendValueInput("FACT_NAME")
+        .setCheck(null)
+        .appendField(new Blockly.FieldTextInput(""), "FACT_VAR")
+        .appendField("Beneficiarios_riesgos_negocio_bicicleta");
+    this.setPreviousStatement(true);
+    this.setNextStatement(true);
+    this.setColour(240);
+  }
+};
+
+Blockly.Drools['fact_beneficiarios_riesgos_negocio_bicicleta'] = function(block) {
+  var text_fact_var = block.getFieldValue('FACT_VAR');
+  var value_fact_name = Blockly.Drools.valueToCode(block, 'FACT_NAME', Blockly.Drools.ORDER_NONE)||'';
+  var code = (text_fact_var != ''?text_fact_var+': ':'')+block.name+' ('+value_fact_name+')\n';
+  block.codigo = code;
+  return code;
+};
+
+Blockly.Blocks['att_beneficiarios_porcentaje_beneficiario'] = {
+  name: 'porcentaje_beneficiario',
+  init: function() {
+    this.appendDummyInput()
+        .setAlign(Blockly.ALIGN_CENTRE)
+        .appendField(new Blockly.FieldTextInput(""), "FIELD_VAR")
+        .appendField("porcentaje_beneficiario");
+    this.setInputsInline(true);
+    this.setOutput(true);
+    this.setColour(270);
+  }
+};
+
+
+Blockly.Drools['att_beneficiarios_porcentaje_beneficiario'] = function(block) {
+  var text_field_var = block.getFieldValue('FIELD_VAR') || '';
+  var code = (text_field_var !== ''?text_field_var+': ':'')+block.name;
+  return [code, Blockly.Drools.ORDER_ATOMIC];
+};
+
+
 
 Blockly.Blocks['fact_direccion'] = {
   name: 'Direccion',
@@ -155,6 +240,7 @@ Blockly.Drools['fact_direccion'] = function(block) {
   var text_fact_var = block.getFieldValue('FACT_VAR');
   var value_fact_name = Blockly.Drools.valueToCode(block, 'FACT_NAME', Blockly.Drools.ORDER_NONE)||'';
   var code = (text_fact_var != ''?text_fact_var+': ':'')+block.name+' ('+value_fact_name+')\n';
+  block.codigo = code;
   return code;
 };
 
